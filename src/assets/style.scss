@@ -1,0 +1,143 @@
+@import "./fonts.scss";
+
+body {
+    background: url("~@/assets/images/background.jpg") repeat;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+#app {
+    margin: 2em;
+    @media (min-width: 800px) {
+        margin: 5em;
+    }
+}
+
+#container {
+    max-width: 1140px;
+    margin: 0 auto;
+    overflow: auto;
+    position: relative;
+
+    background: url("~@/assets/images/paper.jpg") repeat;
+    // border-radius: 0.3em;
+    box-shadow: 2px 2px 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+#content {
+    padding: 0 3em;
+}
+
+#header {
+    display: flex;
+    margin: 2em 0;
+
+    .blog_title {
+        margin: 0 auto;
+        font-family: "Eat at Joe's St";
+
+        font-size: 2.2em;
+        @media (min-width: 400px) {
+            font-size: 3em;
+        }
+        @media (min-width: 800px) {
+            font-size: 5em;
+        }
+        line-height: 1em;
+    }
+}
+
+input,
+textarea,
+button {
+    padding: 5px 10px 5px 10px;
+    font-family: "Kurale";
+    font-size: 1em;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #888888;
+    border-radius: 0.3em;
+}
+button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+button:active {
+    transform: translate(1px, 2px);
+}
+
+#new_post {
+    position: relative;
+
+    form {
+        div {
+            margin: 8px 0;
+
+            input[type="text"],
+            textarea {
+                width: 100%;
+            }
+            textarea {
+                resize: none;
+                overflow: hidden;
+            }
+        }
+
+        div.form-controls {
+            display: flex;
+            justify-content: space-between;
+            margin: -4px -4px;
+            > * {
+                margin: 4px 4px;
+            }
+        }
+    }
+
+    .feather {
+        // display: none;
+        position: absolute;
+        right: 16px;
+        top: -26px;
+
+        :hover {
+            color: #888888;
+        }
+    }
+}
+
+#posts {
+    article {
+        font-family: "Literaturuly", "Kurale";
+        margin: 2em 0;
+
+        header {
+            h2.title {
+                margin: 0;
+                font-size: 2em;
+                font-family: "Amperzand";
+                font-weight: bold;
+            }
+            .publish_date {
+                font-size: 0.9em;
+                font-style: italic;
+            }
+        }
+    }
+}
+
+blockquote {
+    background: rgba(#777, 0.2);
+    border-left: 10px solid #777;
+    color: #43484d;
+    margin: 1em 0em;
+    padding: 0 1em;
+}
+
+pre {
+    background: rgba(#777, 0.2);
+    padding: 1em;
+}
+
+code {
+    width: 100%;
+}
