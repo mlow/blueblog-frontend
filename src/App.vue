@@ -7,21 +7,21 @@
         </header>
         <div id="new_post">
           <FaIcon
-            v-show="!writing"
+            v-show="!authoring"
             class="feather"
             icon="feather-alt"
             size="lg"
-            @click="writing = true"
+            @click="authoring = true"
           />
 
-          <form v-show="writing">
+          <form v-show="authoring">
             <div>
-              <input v-model="post.title" type="text" placeholder="Title" />
+              <input v-model="authoring_post.title" type="text" placeholder="Title" />
             </div>
             <div>
               <textarea
                 oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-                v-model="post.content"
+                v-model="authoring_post.content"
                 placeholder="Write your thoughts..."
               />
             </div>
@@ -31,24 +31,13 @@
                 <input type="checkbox" id="publish_later" />
                 <label for="publish_later">Publish later</label>
               </span>
-              <button type="button" @click="writing = false">Cancel</button>
+              <button type="button" @click="authoring = false">Cancel</button>
             </div>
           </form>
         </div>
         <section id="posts">
-          <Post
-            v-if="writing"
-            :title="post.title || 'Title'"
-            :content="post.content || 'Write your thoughts...'"
-            :publish_date="new Date()"
-          />
-          <Post
-            v-for="post in posts"
-            :key="post.id"
-            :title="post.title"
-            :content="post.content"
-            :publish_date="new Date(post.publish_date)"
-          />
+          <Post v-if="authoring" v-bind="authored_post" />
+          <Post v-for="post in posts" :key="post.id" v-bind="post" />
         </section>
       </div>
     </div>
@@ -63,28 +52,47 @@ export default {
   name: "App",
   data: () => {
     return {
-      writing: false,
-      post: {
+      authoring: false,
+      authoring_post: {
         title: "",
         content: ""
       },
       posts: []
     };
   },
+  computed: {
+    authored_post() {
+      return {
+        title: this.authoring_post.title || "Title",
+        content: this.authoring_post.content || "Write your thoughts...",
+        publish_date: new Date()
+      };
+    }
+  },
   components: {
     Post
   },
   apollo: {
-    posts: gql`
-      query getPosts {
-        posts {
-          id
-          title
-          content
-          publish_date
+    posts: {
+      query: gql`
+        query getPosts {
+          posts {
+            id
+            title
+            content
+            publish_date
+          }
         }
+      `,
+      update: data => {
+        return data.posts.map(post => {
+          return {
+            ...post,
+            publish_date: new Date(post.publish_date)
+          };
+        });
       }
-    `
+    }
   }
 };
 </script>
