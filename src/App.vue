@@ -42,6 +42,13 @@
             :content="post.content || 'Write your thoughts...'"
             :publish_date="new Date()"
           />
+          <Post
+            v-for="post in posts"
+            :key="post.id"
+            :title="post.title"
+            :content="post.content"
+            :publish_date="new Date(post.publish_date)"
+          />
         </section>
       </div>
     </div>
@@ -50,6 +57,7 @@
 
 <script>
 import Post from "./components/Post.vue";
+import gql from "graphql-tag";
 
 export default {
   name: "App",
@@ -59,11 +67,24 @@ export default {
       post: {
         title: "",
         content: ""
-      }
+      },
+      posts: []
     };
   },
   components: {
     Post
+  },
+  apollo: {
+    posts: gql`
+      query getPosts {
+        posts {
+          id
+          title
+          content
+          publish_date
+        }
+      }
+    `
   }
 };
 </script>
