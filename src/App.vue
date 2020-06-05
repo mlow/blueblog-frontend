@@ -27,7 +27,7 @@
             </div>
             <div class="form-controls">
               <span>
-                <button type="button">Publish</button>
+                <button type="button" @click="publish()">Publish</button>
                 <input type="checkbox" id="publish_later" />
                 <label for="publish_later">Publish later</label>
               </span>
@@ -69,8 +69,39 @@ export default {
       };
     }
   },
-  components: {
-    Post
+  methods: {
+    publish() {
+      this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation createPost($input: CreatePostInput!) {
+              post: createPost(input: $input) {
+                id
+                title
+                content
+                publish_date
+              }
+            }
+          `,
+          variables: {
+            input: {
+              author_id: "2ca9b35f-58ef-407d-aaeb-7afc24f9b447",
+              ...this.authored_post
+            }
+          }
+        })
+        .then(data => {
+          this.authoring = false;
+          this.authoring_post = {
+            title: "",
+            content: ""
+          };
+          this.posts.unshift({
+            ...data.data.post,
+            publish_date: new Date(data.data.post.publish_date)
+          });
+        });
+    }
   },
   apollo: {
     posts: {
@@ -93,6 +124,9 @@ export default {
         });
       }
     }
+  },
+  components: {
+    Post
   }
 };
 </script>
