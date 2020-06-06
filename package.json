@@ -20,12 +20,15 @@
     "date-and-time": "^0.13.1",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
+    "js-cookie": "^2.2.1",
+    "jwt-decode": "^2.2.0",
     "sass": "^1.26.7",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
     "vue-apollo": "^3.0.3",
     "vue-markdown": "^2.2.4",
-    "vue-router": "^3.3.2"
+    "vue-router": "^3.3.2",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

@@ -1,39 +1,49 @@
 @import "./fonts.scss";
 
 body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
     background: url("~@/assets/images/background.jpg") repeat;
 }
 
 * {
     box-sizing: border-box;
-}
-
-#app {
-    margin: 2em 0;
-    @media (min-width: 800px) {
-        margin: 3em 0;
-    }
+    font-family: "Kurale";
 }
 
 #container {
     max-width: 1140px;
-    margin: 0 auto;
+    margin: 2em auto;
     overflow: auto;
     position: relative;
 
-    background: url("~@/assets/images/paper.jpg") repeat;
-    // border-radius: 0.3em;
-    box-shadow: 2px 2px 10px 10px rgba(0, 0, 0, 0.2);
-
-    .feather {
+    #user-controls {
         position: absolute;
-        top: 1em;
-        right: 1em;
+        left: 0%;
+        top: 0.75em;
+        width: 100%;
+        display: flex;
+        justify-content: right;
 
-        :hover {
-            opacity: 0.5;
+        padding: 0 1.5em;
+
+        .control {
+            margin-left: 0.75em;
+        }
+
+        .feather {
+            :hover {
+                opacity: 0.5;
+            }
         }
     }
+}
+
+.paper {
+    background: url("~@/assets/images/paper.jpg") repeat;
+    box-shadow: 2px 2px 10px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 1em;
 }
 
 #content {
@@ -102,17 +112,13 @@ button:active {
             }
         }
     }
+}
 
-    .feather {
-        // display: none;
-        position: absolute;
-        right: 16px;
-        top: -26px;
-
-        :hover {
-            color: #888888;
-        }
-    }
+.nothing {
+    margin: 2em 0;
+    text-align: center;
+    font-size: 1.5em;
+    line-height: 1em;
 }
 
 #posts {
@@ -146,9 +152,9 @@ button:active {
         margin-left: -109px;
         left: 50%;
         display: block;
+        background: url("~@/assets/scroll.svg") no-repeat;
         width: 218px;
         height: 16px;
-        background: url("~@/assets/scroll.svg") no-repeat;
         background-size: 218px 16px;
     }
 }
