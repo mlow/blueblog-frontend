@@ -1,26 +1,24 @@
 <template>
-  <div id="outer">
-    <div id="login-container" class="paper">
-      <form @submit.prevent="submit">
-        <div>
-          <label for="name">Username</label>
-          <br />
-          <input type="text" id="name" v-model="form.username" />
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <br />
-          <input type="password" id="password" v-model="form.password" />
-        </div>
-        <div class="form-controls">
-          <span>
-            <button type="submit">Login</button>
-            <span v-if="!!error" v-html="error" class="error" />
-          </span>
-          <button type="button" @click="cancel">Cancel</button>
-        </div>
-      </form>
-    </div>
+  <div id="login-container" class="paper">
+    <form @submit.prevent="submit">
+      <div>
+        <label for="name">Username</label>
+        <br />
+        <input type="text" id="name" v-model="form.username" />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <br />
+        <input type="password" id="password" v-model="form.password" />
+      </div>
+      <div class="form-controls">
+        <span>
+          <button type="submit">Login</button>
+          <span v-if="!!error" v-html="error" class="error" />
+        </span>
+        <button type="button" @click="cancel">Cancel</button>
+      </div>
+    </form>
   </div>
 </template>
 
