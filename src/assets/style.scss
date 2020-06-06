@@ -86,30 +86,31 @@ button:active {
     transform: translate(1px, 2px);
 }
 
-#new_post {
-    position: relative;
+form#new_post {
+    div {
+        margin: 8px 0;
 
-    form {
-        div {
-            margin: 8px 0;
-
-            input[type="text"],
-            textarea {
-                width: 100%;
-            }
-            textarea {
-                resize: none;
-                overflow: hidden;
-            }
+        input[type="text"],
+        textarea {
+            width: 100%;
+        }
+        textarea {
+            resize: none;
+            overflow: hidden;
         }
 
-        div.form-controls {
-            display: flex;
-            justify-content: space-between;
-            margin: -4px -4px;
-            > * {
-                margin: 4px 4px;
-            }
+        .error {
+            margin-left: 0.75em;
+            color: #ce1111;
+        }
+    }
+
+    div.form-controls {
+        display: flex;
+        justify-content: space-between;
+        margin: -4px -4px;
+        > * {
+            margin: 4px 4px;
         }
     }
 }
@@ -121,7 +122,7 @@ button:active {
     line-height: 1em;
 }
 
-#posts {
+#posts > div {
     margin: -1em 0;
 
     article {

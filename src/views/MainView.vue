@@ -1,37 +1,48 @@
 <template>
   <div id="view:main">
-    <FaIcon
-      v-show="!authoring"
-      class="feather"
-      icon="feather-alt"
-      size="lg"
-      @click="authoring = true"
-    />
-    <div id="new_post">
-      <form v-show="authoring">
-        <div>
-          <input v-model="authoring_post.title" type="text" placeholder="Title" />
-        </div>
-        <div>
-          <textarea
-            oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-            v-model="authoring_post.content"
-            placeholder="Write your thoughts..."
-          />
-        </div>
-        <div class="form-controls">
-          <span>
-            <button type="button" @click="publish()">Publish</button>
-            <input type="checkbox" id="publish_later" />
-            <label for="publish_later">Publish later</label>
-          </span>
-          <button type="button" @click="authoring = false">Cancel</button>
-        </div>
-      </form>
-    </div>
+    <span id="user-controls">
+      <FaIcon
+        v-if="this.$store.getters.loggedIn"
+        v-show="!authoring"
+        class="feather control"
+        icon="feather-alt"
+        size="lg"
+        @click="authoring = true"
+      />
+      <span class="control">
+        <router-link v-if="this.$store.getters.loggedIn" to="/logout">Logout</router-link>
+        <router-link v-else to="/login">Login</router-link>
+      </span>
+    </span>
+    <form v-if="authoring" id="new_post">
+      <div>
+        <input v-model="authoring_post.title" type="text" placeholder="Title" />
+      </div>
+      <div>
+        <textarea
+          oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+          v-model="authoring_post.content"
+          placeholder="Write your thoughts..."
+        />
+      </div>
+      <div class="form-controls">
+        <span>
+          <button type="button" @click="publish()">Publish</button>
+          <input type="checkbox" id="publish_later" />
+          <label for="publish_later">Publish later</label>
+          <span v-if="!!error" v-html="error" class="error" />
+        </span>
+        <button type="button" @click="authoring = false">Cancel</button>
+      </div>
+    </form>
     <section id="posts">
-      <Post v-if="authoring" v-bind="authored_post" />
-      <Post v-for="post in posts" :key="post.id" v-bind="post" />
+      <div v-if="authoring">
+        <Post v-bind="authored_post" />
+      </div>
+      <div v-else-if="posts.length">
+        <Post v-for="post in posts" :key="post.id" v-bind="post" />
+      </div>
+      <div v-else class="nothing">Check back later!</div>
     </section>
   </div>
 </template>
@@ -51,7 +62,8 @@ export default {
         title: "",
         content: ""
       },
-      posts: []
+      posts: [],
+      error: ""
     };
   },
   computed: {
@@ -79,7 +91,7 @@ export default {
           `,
           variables: {
             input: {
-              author_id: "2ca9b35f-58ef-407d-aaeb-7afc24f9b447",
+              author_id: this.$store.getters.userData.author.id,
               ...this.authored_post
             }
           }
@@ -94,6 +106,13 @@ export default {
             ...data.data.post,
             publish_date: new Date(data.data.post.publish_date)
           });
+        })
+        .catch(error => {
+          if (Object.prototype.hasOwnProperty.call(error, "graphQLErrors")) {
+            this.error = error.graphQLErrors[0].message;
+          } else {
+            this.error = error.message;
+          }
         });
     }
   },
