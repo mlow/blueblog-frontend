@@ -36,12 +36,12 @@
       </div>
     </form>
     <section id="posts">
-      <div v-if="authoring">
+      <template v-if="authoring">
         <Post v-bind="authored_post" />
-      </div>
-      <div v-else-if="posts.length">
+      </template>
+      <template v-else-if="posts.length">
         <Post v-for="post in posts" :key="post.id" v-bind="post" />
-      </div>
+      </template>
       <div v-else class="nothing">Check back later!</div>
     </section>
   </div>
