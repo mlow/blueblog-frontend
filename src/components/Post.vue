@@ -33,7 +33,7 @@ export default {
 
 <style lang="scss">
 article.post {
-  font-family: "Kurale";
+  font-family: "GL Erekles Stamba";
   margin: 3em 0;
 
   header {
