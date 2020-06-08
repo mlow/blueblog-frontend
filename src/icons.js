@@ -1,13 +1,17 @@
-import Vue from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import Vue from "vue";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { library } from "@fortawesome/fontawesome-svg-core";
 
 import {
-    faFeatherAlt
-} from '@fortawesome/free-solid-svg-icons';
+  faFeatherAlt,
+  faTimes,
+  faPencilAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 library.add([
-    faFeatherAlt
+  faFeatherAlt,
+  faTimes,
+  faPencilAlt
 ]);
 
-Vue.component('FaIcon', FontAwesomeIcon);
+Vue.component("FaIcon", FontAwesomeIcon);
