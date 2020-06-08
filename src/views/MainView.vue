@@ -4,7 +4,7 @@
       <FaIcon
         v-if="this.$store.getters.loggedIn"
         v-show="!authoring"
-        class="feather control"
+        class="icon control"
         icon="feather-alt"
         size="lg"
         @click="authoring = true"
@@ -37,10 +37,10 @@
     </form>
     <section id="posts">
       <template v-if="authoring">
-        <Post v-bind="authored_post" />
+        <Post :editing="true" :post="authored_post" />
       </template>
       <template v-else-if="posts.length">
-        <Post v-for="post in posts" :key="post.id" v-bind="post" />
+        <Post v-for="post in posts" :key="post.id" :post="post" />
       </template>
       <div v-else class="nothing">Check back later!</div>
     </section>
@@ -125,6 +125,13 @@ export default {
             title
             content
             publish_date
+            author {
+              id
+            }
+            edits {
+              id
+              date
+            }
           }
         }
       `,

@@ -1,32 +1,61 @@
 <template>
-  <article class="post">
+  <article class="post" @mouseover="hovered = true" @mouseleave="hovered = false">
     <header>
-      <h2 class="title">{{ title }}</h2>
-      <span class="publish_date">{{ publish_date_formatted }}</span>
+      <div>
+        <h2 class="title">{{ post.title }}</h2>
+      </div>
+      <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
     <div class="content">
-      <VueMarkdown :source="content"></VueMarkdown>
+      <VueMarkdown :source="post.content"></VueMarkdown>
     </div>
+    <PostEditList v-if="post.edits.length && this.owns_post" :edits="post.edits" />
   </article>
 </template>
 
 <script>
-import VueMarkdown from "vue-markdown";
 import date from "date-and-time";
+import VueMarkdown from "vue-markdown";
+import PostEditList from "./PostEditList";
 
 export default {
+  data() {
+    return {
+      hovered: false
+    };
+  },
   props: {
-    title: String,
-    content: String,
-    publish_date: Date
+    editing: {
+      type: Boolean,
+      default: false
+    },
+    post: {
+      type: Object,
+      default() {
+        return {
+          id: undefined,
+          title: "",
+          content: "",
+          publish_date: new Date(),
+          edits: []
+        };
+      }
+    }
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.publish_date, "ddd, MMM D, YYYY");
+      return date.format(this.post.publish_date, "ddd, MMM D, YYYY");
+    },
+    owns_post() {
+      return (
+        this.$store.getters.loggedIn &&
+        this.$store.getters.userData.sub == this.post.author.id
+      );
     }
   },
   components: {
-    VueMarkdown
+    VueMarkdown,
+    PostEditList
   }
 };
 </script>
@@ -37,7 +66,8 @@ article.post {
   margin: 3em 0;
 
   header {
-    h2.title {
+    .title {
+      display: inline;
       margin: 0;
       font-size: 2em;
       font-family: "Amperzand";
@@ -49,7 +79,7 @@ article.post {
     }
   }
 
-  div.content {
+  > div.content {
     padding: 0 11px;
 
     blockquote {
