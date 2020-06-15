@@ -7,11 +7,7 @@
     <header>
       <div>
         <h2 class="title">{{ post.title }}</h2>
-        <span
-          v-if="!editing && this.owns_post"
-          v-show="hovered"
-          class="post-controls"
-        >
+        <span v-if="owns_post" v-show="hovered" class="post-controls">
           <FaIcon
             class="icon"
             icon="pencil-alt"
@@ -56,7 +52,7 @@ export default {
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.post.publish_date, "HH:mm on dddd, MMMM D, YYYY");
+      return date.format(this.post.publish_date, "D MMMM YYYY");
     },
     owns_post() {
       return (
