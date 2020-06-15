@@ -45,7 +45,7 @@ import {
   getPosts,
   createPost,
   editPost,
-  deletePost
+  deletePost,
 } from "../graphql/posts.gql";
 
 export default {
@@ -57,9 +57,9 @@ export default {
         id: null,
         title: "",
         content: "",
-        publish_date: new Date()
+        publish_date: new Date(),
       },
-      posts: []
+      posts: [],
     };
   },
   methods: {
@@ -85,23 +85,23 @@ Are you sure?`)
         .mutate({
           mutation: deletePost,
           variables: {
-            id: post.id
+            id: post.id,
           },
           update: (cache, { data: { id } }) => {
             const data = cache.readQuery({
-              query: getPosts
+              query: getPosts,
             });
             data.posts.splice(
-              data.posts.findIndex(post => post.id == id),
+              data.posts.findIndex((post) => post.id == id),
               1
             );
             cache.writeQuery({
               query: getPosts,
-              data
+              data,
             });
-          }
+          },
         })
-        .catch(error => alert(error));
+        .catch((error) => alert(error));
     },
     edit(id, post) {
       this.$apollo
@@ -109,27 +109,27 @@ Are you sure?`)
           mutation: editPost,
           variables: {
             id,
-            input: post
+            input: post,
           },
           update: (cache, { data: { post } }) => {
             const data = cache.readQuery({
-              query: getPosts
+              query: getPosts,
             });
             data.posts.splice(
-              data.posts.findIndex(post => post.id == id),
+              data.posts.findIndex((post) => post.id == id),
               1,
               post
             );
             cache.writeQuery({
               query: getPosts,
-              data
+              data,
             });
-          }
+          },
         })
         .then(() => {
           this.authoring = false;
         })
-        .catch(error => alert(error));
+        .catch((error) => alert(error));
     },
     publish(post) {
       this.$apollo
@@ -138,50 +138,50 @@ Are you sure?`)
           variables: {
             input: {
               author_id: this.$store.getters.userData.author.id,
-              ...post
-            }
+              ...post,
+            },
           },
           update: (cache, { data: { post } }) => {
             const data = cache.readQuery({
-              query: getPosts
+              query: getPosts,
             });
             data.posts.unshift(post);
             cache.writeQuery({
               query: getPosts,
-              data
+              data,
             });
-          }
+          },
         })
         .then(() => {
           this.authoring = false;
           this.authoring_post = {
             title: "",
-            content: ""
+            content: "",
           };
         })
-        .catch(error => alert(error));
-    }
+        .catch((error) => alert(error));
+    },
   },
   apollo: {
     posts: {
       query: getPosts,
-      update: data => {
-        return data.posts.map(post => {
+      update: (data) => {
+        return data.posts.map((post) => {
           return {
             ...post,
-            publish_date: new Date(post.publish_date)
+            publish_date: new Date(post.publish_date),
           };
         });
-      }
-    }
+      },
+    },
   },
   components: {
     Post,
-    PostEditor
+    PostEditor,
   },
   created() {
     this.$emit("update:layout", PageLayout);
-  }
+  },
 };
 </script>
 

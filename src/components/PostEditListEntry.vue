@@ -17,19 +17,19 @@ import PostEditChanges from "./PostEditChanges";
 export default {
   data() {
     return {
-      expanded: false
+      expanded: false,
     };
   },
   props: {
-    edit: Object
+    edit: Object,
   },
   computed: {
     edit_date_formatted() {
       return date.format(new Date(this.edit.date), "MMM D, YYYY @ hh:mm:ss");
-    }
+    },
   },
   components: {
-    PostEditChanges
-  }
+    PostEditChanges,
+  },
 };
 </script>

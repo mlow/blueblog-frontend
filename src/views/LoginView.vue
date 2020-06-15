@@ -30,9 +30,9 @@ export default {
     return {
       form: {
         username: "",
-        password: ""
+        password: "",
       },
-      error: ""
+      error: "",
     };
   },
   methods: {
@@ -42,7 +42,7 @@ export default {
         .then(() => {
           this.$router.push({ name: "main" });
         })
-        .catch(error => {
+        .catch((error) => {
           if (Object.prototype.hasOwnProperty.call(error, "graphQLErrors")) {
             this.error = error.graphQLErrors[0].message;
           } else {
@@ -52,11 +52,11 @@ export default {
     },
     cancel() {
       this.$router.push({ name: "main" });
-    }
+    },
   },
   created() {
     this.$emit("update:layout", BlankLayout);
-  }
+  },
 };
 </script>
 

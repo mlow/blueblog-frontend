@@ -10,14 +10,14 @@ export default {
     value: Date,
     format: {
       type: String,
-      default: "YYYY-MM-DD HH:mm:ss"
+      default: "YYYY-MM-DD HH:mm:ss",
     },
-    placeholder: String
+    placeholder: String,
   },
   data() {
     return {
       active: false,
-      working: ""
+      working: "",
     };
   },
   computed: {
@@ -38,8 +38,8 @@ export default {
           newValue = null;
         }
         this.$emit("input", newValue);
-      }
-    }
+      },
+    },
   },
   methods: {
     focus() {
@@ -47,7 +47,7 @@ export default {
         this.working = date.format(this.value, this.format);
       }
       this.active = true;
-    }
-  }
+    },
+  },
 };
 </script>

@@ -4,11 +4,11 @@ fragment postDetails on Post {
   content
   publish_date
   author {
-      id
+    id
   }
   edits {
-      id
-      date
+    id
+    date
   }
 }
 
@@ -20,7 +20,7 @@ query getPosts {
 
 mutation createPost($input: CreatePostInput!) {
   post: createPost(input: $input) {
-      ...postDetails
+    ...postDetails
   }
 }
 

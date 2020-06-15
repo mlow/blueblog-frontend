@@ -12,7 +12,6 @@ const cache = new InMemoryCache();
 
 export const apollo = new ApolloClient({
   link: createHttpLink({
-    // You should use an absolute URL here
     uri: "/graphql",
     credentials: "include",
     fetch: (uri, options) => {

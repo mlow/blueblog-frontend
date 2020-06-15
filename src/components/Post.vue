@@ -42,13 +42,13 @@ import PostEditList from "./PostEditList";
 export default {
   data() {
     return {
-      hovered: false
+      hovered: false,
     };
   },
   props: {
     post: {
-      type: Object
-    }
+      type: Object,
+    },
   },
   computed: {
     publish_date_formatted() {
@@ -59,12 +59,12 @@ export default {
         this.$store.getters.loggedIn &&
         this.$store.getters.userData.sub == this.post.author.id
       );
-    }
+    },
   },
   components: {
     VueMarkdown,
-    PostEditList
-  }
+    PostEditList,
+  },
 };
 </script>
 

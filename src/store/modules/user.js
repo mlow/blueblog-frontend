@@ -9,7 +9,7 @@ export const state = {
 
 export const getters = {
   loggedIn: (state) => {
-    return !!state.userData && (state.userData.exp * 1000) > Date.now();
+    return !!state.userData && state.userData.exp * 1000 > Date.now();
   },
   userData: (state) => state.userData,
 };
@@ -25,9 +25,10 @@ export const mutations = {
 };
 
 const auth_query = gql`
-mutation authenticate($username: String!, $password: String!) {
-  authenticate(username: $username, password: $password)
-}`;
+  mutation authenticate($username: String!, $password: String!) {
+    authenticate(username: $username, password: $password)
+  }
+`;
 
 export const actions = {
   initAuth({ commit }) {
@@ -39,15 +40,17 @@ export const actions = {
     }
   },
   login({ commit }, { username, password }) {
-    return apollo.mutate({
-      mutation: auth_query,
-      variables: { username, password },
-    }).then(() => {
-      let jwtPayload = Cookies.get("jwt.header.payload");
-      commit("UPDATE_AUTH_DATA", {
-        userData: JwtDecode(jwtPayload),
+    return apollo
+      .mutate({
+        mutation: auth_query,
+        variables: { username, password },
+      })
+      .then(() => {
+        let jwtPayload = Cookies.get("jwt.header.payload");
+        commit("UPDATE_AUTH_DATA", {
+          userData: JwtDecode(jwtPayload),
+        });
       });
-    });
   },
   logout({ commit }) {
     commit("CLEAR_AUTH_DATA");

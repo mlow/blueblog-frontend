@@ -20,7 +20,7 @@ export default {
   props: {
     title: String,
     content: String,
-    publish_date: Date
+    publish_date: Date,
   },
   computed: {
     publish_date_formatted() {
@@ -31,10 +31,10 @@ export default {
     },
     draft_content() {
       return this.content || "Write your thoughts...";
-    }
+    },
   },
   components: {
-    VueMarkdown
-  }
+    VueMarkdown,
+  },
 };
 </script>

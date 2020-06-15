@@ -16,15 +16,15 @@ import PostEditListEntry from "./PostEditListEntry";
 export default {
   data() {
     return {
-      expanded: false
+      expanded: false,
     };
   },
   props: {
-    edits: Array
+    edits: Array,
   },
   components: {
-    PostEditListEntry
-  }
+    PostEditListEntry,
+  },
 };
 </script>
 

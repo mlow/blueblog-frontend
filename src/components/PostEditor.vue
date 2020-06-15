@@ -43,18 +43,18 @@ export default {
         title: this.title,
         content: this.content,
         publish_date: this.publish_date,
-        is_published: true
+        is_published: true,
       },
-      error: ""
+      error: "",
     };
   },
   props: {
     id: {
-      required: false
+      required: false,
     },
     title: String,
     content: String,
-    publish_date: Date
+    publish_date: Date,
   },
   methods: {
     saveEvent() {
@@ -63,16 +63,16 @@ export default {
       } else {
         this.$emit("publish", this.post);
       }
-    }
+    },
   },
   computed: {
     saveButtonLabel() {
       return this.id ? "Edit" : "Publish";
-    }
+    },
   },
   components: {
     PostDraft,
-    DateTimeInput
-  }
+    DateTimeInput,
+  },
 };
 </script>

@@ -9,17 +9,17 @@ export default {
   data() {
     return {
       edit: {
-        changes: []
-      }
+        changes: [],
+      },
     };
   },
   props: {
-    edit_id: String
+    edit_id: String,
   },
   computed: {
     changes_formatted() {
       return this.edit.changes
-        .map(change => {
+        .map((change) => {
           if (change.added) {
             return `<ins>${change.text}</ins>`;
           } else if (change.removed) {
@@ -29,7 +29,7 @@ export default {
           }
         })
         .join("");
-    }
+    },
   },
   apollo: {
     edit: {
@@ -48,9 +48,9 @@ export default {
       `,
       variables() {
         return { edit_id: this.edit_id };
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 

@@ -8,10 +8,6 @@ import {
   faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add([
-  faFeatherAlt,
-  faTimes,
-  faPencilAlt
-]);
+library.add([faFeatherAlt, faTimes, faPencilAlt]);
 
 Vue.component("FaIcon", FontAwesomeIcon);
