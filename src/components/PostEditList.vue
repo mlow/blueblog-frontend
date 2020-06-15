@@ -35,7 +35,7 @@ div.edits {
   }
   ul {
     padding: 0;
-    margin: 0 0 0 0.5em;
+    margin: 0 0 0 0.5rem;
     list-style: none;
 
     li {
@@ -43,7 +43,7 @@ div.edits {
         cursor: pointer;
       }
       > .content {
-        padding: 0 1em;
+        padding: 0 1rem;
       }
     }
   }

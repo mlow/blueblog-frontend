@@ -75,41 +75,42 @@ export default {
 <style lang="scss">
 article.post {
   font-family: "GL Erekles Stamba";
-  margin: 3em 0;
+  margin: 3rem 0;
 
   header {
     .title {
       display: inline;
       margin: 0;
-      font-size: 2em;
+      font-size: 2rem;
       font-family: "Amperzand";
       font-weight: bold;
     }
 
     .post-controls > * {
-      margin-left: 0.5em;
+      margin-left: 0.5rem;
     }
 
     .publish_date {
-      font-size: 0.9em;
+      font-size: 0.9rem;
       font-style: italic;
     }
   }
 
   > div.content {
-    padding: 0 11px;
+    //
+    padding: 0 0.6875rem;
 
     blockquote {
       background: rgba(#777, 0.2);
-      border-left: 10px solid #777;
+      border-left: 0.5rem solid #777;
       color: #43484d;
-      margin: 1em 0em;
-      padding: 0 1em;
+      margin: 1rem 0;
+      padding: 0 1rem;
     }
 
     pre {
       background: rgba(#777, 0.2);
-      padding: 1em;
+      padding: 1rem;
     }
 
     code {

@@ -18,7 +18,6 @@
       v-if="authoring"
       v-bind="authoring_post"
       @cancel="authoring=false"
-      nothing
     />
     <section v-else id="posts">
       <template v-if="posts.length">
