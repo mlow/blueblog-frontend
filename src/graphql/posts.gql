@@ -1,0 +1,35 @@
+fragment postDetails on Post {
+  id
+  title
+  content
+  publish_date
+  author {
+      id
+  }
+  edits {
+      id
+      date
+  }
+}
+
+query getPosts {
+  posts {
+    ...postDetails
+  }
+}
+
+mutation createPost($input: CreatePostInput!) {
+  post: createPost(input: $input) {
+      ...postDetails
+  }
+}
+
+mutation editPost($id: ID!, $input: UpdatePostInput!) {
+  post: updatePost(id: $id, input: $input) {
+    ...postDetails
+  }
+}
+
+mutation deletePost($id: ID!) {
+  id: deletePost(id: $id)
+}

@@ -22,8 +22,7 @@
       </div>
       <div class="form-group flex flex-between">
         <span>
-          <button type="button" @click="save()">Save</button>
-          <button type="button" @click="publish()">Publish</button>
+          <button type="button" @click="saveEvent">{{ saveButtonLabel }}</button>
           <span v-if="!!error" class="error">{{ error }}</span>
         </span>
         <button type="button" @click="$emit('cancel')">Cancel</button>
@@ -43,7 +42,8 @@ export default {
       post: {
         title: this.title,
         content: this.content,
-        publish_date: this.publish_date
+        publish_date: this.publish_date,
+        is_published: true
       },
       error: ""
     };
@@ -55,6 +55,20 @@ export default {
     title: String,
     content: String,
     publish_date: Date
+  },
+  methods: {
+    saveEvent() {
+      if (this.id) {
+        this.$emit("edit", this.id, this.post);
+      } else {
+        this.$emit("publish", this.post);
+      }
+    }
+  },
+  computed: {
+    saveButtonLabel() {
+      return this.id ? "Edit" : "Publish";
+    }
   },
   components: {
     PostDraft,

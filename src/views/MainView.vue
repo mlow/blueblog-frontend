@@ -18,6 +18,8 @@
       v-if="authoring"
       v-bind="authoring_post"
       @cancel="authoring=false"
+      @edit="edit"
+      @publish="publish"
     />
     <section v-else id="posts">
       <template v-if="posts.length">
@@ -35,11 +37,16 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
-
 import PageLayout from "../layouts/PageLayout.vue";
 import Post from "../components/Post.vue";
 import PostEditor from "../components/PostEditor";
+
+import {
+  getPosts,
+  createPost,
+  editPost,
+  deletePost
+} from "../graphql/posts.gql";
 
 export default {
   name: "Main",
@@ -58,82 +65,106 @@ export default {
   methods: {
     postEdit(post) {
       for (let k in this.authoring_post) {
+        // copy fields of clicked post to authored post
         this.authoring_post[k] = post[k];
       }
       this.authoring = true;
     },
     postDelete(post) {
-      const confirm = window.confirm(
-        `\
+      if (
+        !window.confirm(`\
 You are about to delete the post:
 
     ${post.title}
 
-Are you sure?`
-      );
-      if (!confirm) {
+Are you sure?`)
+      ) {
         return;
       }
-    },
-    publish() {
       this.$apollo
         .mutate({
-          mutation: gql`
-            mutation createPost($input: CreatePostInput!) {
-              post: createPost(input: $input) {
-                id
-                title
-                content
-                publish_date
-              }
-            }
-          `,
+          mutation: deletePost,
+          variables: {
+            id: post.id
+          },
+          update: (cache, { data: { id } }) => {
+            const data = cache.readQuery({
+              query: getPosts
+            });
+            data.posts.splice(
+              data.posts.findIndex(post => post.id == id),
+              1
+            );
+            cache.writeQuery({
+              query: getPosts,
+              data
+            });
+          }
+        })
+        .catch(error => alert(error));
+    },
+    edit(id, post) {
+      this.$apollo
+        .mutate({
+          mutation: editPost,
+          variables: {
+            id,
+            input: post
+          },
+          update: (cache, { data: { post } }) => {
+            const data = cache.readQuery({
+              query: getPosts
+            });
+            data.posts.splice(
+              data.posts.findIndex(post => post.id == id),
+              1,
+              post
+            );
+            cache.writeQuery({
+              query: getPosts,
+              data
+            });
+          }
+        })
+        .then(() => {
+          this.authoring = false;
+        })
+        .catch(error => alert(error));
+    },
+    publish(post) {
+      this.$apollo
+        .mutate({
+          mutation: createPost,
           variables: {
             input: {
               author_id: this.$store.getters.userData.author.id,
-              ...this.authored_post
+              ...post
             }
+          },
+          update: (cache, { data: { post } }) => {
+            const data = cache.readQuery({
+              query: getPosts
+            });
+            data.posts.unshift(post);
+            cache.writeQuery({
+              query: getPosts,
+              data
+            });
           }
         })
-        .then(data => {
+        .then(() => {
           this.authoring = false;
           this.authoring_post = {
             title: "",
             content: ""
           };
-          this.posts.unshift({
-            ...data.data.post,
-            publish_date: new Date(data.data.post.publish_date)
-          });
         })
-        .catch(error => {
-          if (Object.prototype.hasOwnProperty.call(error, "graphQLErrors")) {
-            this.error = error.graphQLErrors[0].message;
-          } else {
-            this.error = error.message;
-          }
-        });
+        .catch(error => alert(error));
     }
   },
   apollo: {
     posts: {
-      query: gql`
-        query getPosts {
-          posts {
-            id
-            title
-            content
-            publish_date
-            author {
-              id
-            }
-            edits {
-              id
-              date
-            }
-          }
-        }
-      `,
+      query: getPosts,
       update: data => {
         return data.posts.map(post => {
           return {
