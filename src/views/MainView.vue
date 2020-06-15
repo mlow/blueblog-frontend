@@ -2,7 +2,7 @@
   <div id="view:main">
     <span id="user-controls">
       <FaIcon
-        v-if="this.$store.getters.loggedIn"
+        v-if="loggedIn"
         v-show="!authoring"
         class="icon control"
         icon="feather-alt"
@@ -10,14 +10,14 @@
         @click="authoring = true"
       />
       <span class="control">
-        <router-link v-if="this.$store.getters.loggedIn" to="/logout">Logout</router-link>
+        <router-link v-if="loggedIn" to="/logout">Logout</router-link>
         <router-link v-else to="/login">Login</router-link>
       </span>
     </span>
     <PostEditor
       v-if="authoring"
       v-bind="authoring_post"
-      @cancel="authoring=false"
+      @cancel="authoring = false"
       @edit="edit"
       @publish="publish"
     />
@@ -40,6 +40,7 @@
 import PageLayout from "../layouts/PageLayout.vue";
 import Post from "../components/Post.vue";
 import PostEditor from "../components/PostEditor";
+import { mapGetters } from "vuex";
 
 import {
   getPosts,
@@ -61,6 +62,9 @@ export default {
       },
       posts: [],
     };
+  },
+  computed: {
+    ...mapGetters(["loggedIn"]),
   },
   methods: {
     postEdit(post) {
@@ -165,8 +169,8 @@ Are you sure?`)
   apollo: {
     posts: {
       query: getPosts,
-      update: (data) => {
-        return data.posts.map((post) => {
+      update: ({ posts }) => {
+        return posts.map((post) => {
           return {
             ...post,
             publish_date: new Date(post.publish_date),
