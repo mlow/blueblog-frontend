@@ -1,15 +1,40 @@
 <template>
-  <article class="post" @mouseover="hovered = true" @mouseleave="hovered = false">
+  <article
+    class="post"
+    @mouseover="hovered = true"
+    @mouseleave="hovered = false"
+  >
     <header>
       <div>
         <h2 class="title">{{ post.title }}</h2>
+        <span
+          v-if="!editing && this.owns_post"
+          v-show="hovered"
+          class="post-controls"
+        >
+          <FaIcon
+            class="icon"
+            icon="pencil-alt"
+            size="lg"
+            @click="$emit('edit', post)"
+          />
+          <FaIcon
+            class="icon"
+            icon="times"
+            size="lg"
+            @click="$emit('delete', post)"
+          />
+        </span>
       </div>
       <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
     <div class="content">
       <VueMarkdown :source="post.content"></VueMarkdown>
     </div>
-    <PostEditList v-if="post.edits.length && this.owns_post" :edits="post.edits" />
+    <PostEditList
+      v-if="post.edits && post.edits.length && this.owns_post"
+      :edits="post.edits"
+    />
   </article>
 </template>
 
@@ -25,26 +50,13 @@ export default {
     };
   },
   props: {
-    editing: {
-      type: Boolean,
-      default: false
-    },
     post: {
-      type: Object,
-      default() {
-        return {
-          id: undefined,
-          title: "",
-          content: "",
-          publish_date: new Date(),
-          edits: []
-        };
-      }
+      type: Object
     }
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.post.publish_date, "ddd, MMM D, YYYY");
+      return date.format(this.post.publish_date, "HH:mm on dddd, MMMM D, YYYY");
     },
     owns_post() {
       return (
@@ -73,6 +85,11 @@ article.post {
       font-family: "Amperzand";
       font-weight: bold;
     }
+
+    .post-controls > * {
+      margin-left: 0.5em;
+    }
+
     .publish_date {
       font-size: 0.9em;
       font-style: italic;

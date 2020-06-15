@@ -14,35 +14,23 @@
         <router-link v-else to="/login">Login</router-link>
       </span>
     </span>
-    <form v-if="authoring" id="new_post">
-      <div>
-        <input v-model="authoring_post.title" type="text" placeholder="Title" />
-      </div>
-      <div>
-        <textarea
-          oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
-          v-model="authoring_post.content"
-          placeholder="Write your thoughts..."
+    <PostEditor
+      v-if="authoring"
+      v-bind="authoring_post"
+      @cancel="authoring=false"
+      nothing
+    />
+    <section v-else id="posts">
+      <template v-if="posts.length">
+        <Post
+          v-for="post in posts"
+          :key="post.id"
+          :post="post"
+          @edit="postEdit"
+          @delete="postDelete"
         />
-      </div>
-      <div class="form-controls">
-        <span>
-          <button type="button" @click="publish()">Publish</button>
-          <input type="checkbox" id="publish_later" />
-          <label for="publish_later">Publish later</label>
-          <span v-if="!!error" v-html="error" class="error" />
-        </span>
-        <button type="button" @click="authoring = false">Cancel</button>
-      </div>
-    </form>
-    <section id="posts">
-      <template v-if="authoring">
-        <Post :editing="true" :post="authored_post" />
       </template>
-      <template v-else-if="posts.length">
-        <Post v-for="post in posts" :key="post.id" :post="post" />
-      </template>
-      <div v-else class="nothing">Check back later!</div>
+      <div v-else class="nothing-to-see">Check back later!</div>
     </section>
   </div>
 </template>
@@ -52,6 +40,7 @@ import gql from "graphql-tag";
 
 import PageLayout from "../layouts/PageLayout.vue";
 import Post from "../components/Post.vue";
+import PostEditor from "../components/PostEditor";
 
 export default {
   name: "Main",
@@ -59,23 +48,34 @@ export default {
     return {
       authoring: false,
       authoring_post: {
+        id: null,
         title: "",
-        content: ""
+        content: "",
+        publish_date: new Date()
       },
-      posts: [],
-      error: ""
+      posts: []
     };
   },
-  computed: {
-    authored_post() {
-      return {
-        title: this.authoring_post.title || "Title",
-        content: this.authoring_post.content || "Write your thoughts...",
-        publish_date: new Date()
-      };
-    }
-  },
   methods: {
+    postEdit(post) {
+      for (let k in this.authoring_post) {
+        this.authoring_post[k] = post[k];
+      }
+      this.authoring = true;
+    },
+    postDelete(post) {
+      const confirm = window.confirm(
+        `\
+You are about to delete the post:
+
+    ${post.title}
+
+Are you sure?`
+      );
+      if (!confirm) {
+        return;
+      }
+    },
     publish() {
       this.$apollo
         .mutate({
@@ -146,10 +146,20 @@ export default {
     }
   },
   components: {
-    Post
+    Post,
+    PostEditor
   },
   created() {
     this.$emit("update:layout", PageLayout);
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.nothing-to-see {
+  margin: 2em 0;
+  text-align: center;
+  font-size: 1.5em;
+  line-height: 1em;
+}
+</style>

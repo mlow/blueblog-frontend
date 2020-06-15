@@ -1,5 +1,8 @@
 <template>
-  <li :class="expanded ? 'expanded' : 'collapsed'" @click="expanded = !expanded">
+  <li
+    :class="expanded ? 'expanded' : 'collapsed'"
+    @click="expanded = !expanded"
+  >
     <span>{{ edit_date_formatted }}</span>
     <template v-if="expanded">
       <PostEditChanges :edit_id="edit.id" />

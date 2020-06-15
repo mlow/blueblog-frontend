@@ -1,6 +1,7 @@
 @import "./fonts.scss";
 
 body {
+    padding: 2rem;
     margin: 0;
     height: 100%;
     width: 100%;
@@ -20,7 +21,7 @@ body {
 
 #container {
     max-width: 1140px;
-    margin: 2em auto;
+    margin: 0 auto;
     overflow: auto;
     position: relative;
 
@@ -86,54 +87,50 @@ button:active {
     transform: translate(1px, 2px);
 }
 
-form#new_post {
-    div {
-        margin: 8px 0;
-
-        input[type="text"],
-        textarea {
-            width: 100%;
-        }
-        textarea {
-            resize: none;
-            overflow: hidden;
-        }
-
-        .error {
-            margin-left: 0.75em;
-            color: #ce1111;
-        }
-    }
-
-    div.form-controls {
-        display: flex;
-        justify-content: space-between;
-        margin: -4px -4px;
-        > * {
-            margin: 4px 4px;
-        }
-    }
-}
-
-.nothing {
-    margin: 2em 0;
-    text-align: center;
-    font-size: 1.5em;
-    line-height: 1em;
-}
-
 #posts {
-    margin: -1em 0;
-
     > :not(:last-child):after {
         content: "";
         position: absolute;
-        margin-left: -109px;
         left: 50%;
-        display: block;
+        margin-left: -109px;
         background: url("~@/assets/scroll.svg") no-repeat;
         width: 218px;
         height: 16px;
         background-size: 218px 16px;
+    }
+}
+
+.error {
+    margin-left: 0.75em;
+    color: #ce1111;
+}
+
+.flex {
+    display: flex;
+
+    &-between {
+        justify-content: space-between;
+    }
+}
+
+.form-control {
+    .form-group {
+        margin: 0.5rem 0;
+    }
+
+    .flex {
+        margin: -0.25rem -0.25rem;
+        > * {
+            margin: 0.25rem 0.25rem;
+        }
+    }
+
+    textarea {
+        resize: none;
+        overflow: hidden;
+    }
+
+    button {
+        margin-right: 0.5rem;
     }
 }

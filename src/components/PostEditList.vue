@@ -1,6 +1,9 @@
 <template>
   <div class="edits">
-    <span :class="expanded ? 'expanded' : 'collapsed'" @click="expanded = !expanded">Edits</span>
+    <span
+      :class="expanded ? 'expanded' : 'collapsed'"
+      @click="expanded = !expanded"
+    >Edits</span>
     <ul v-if="expanded">
       <PostEditListEntry v-for="edit in edits" :key="edit.id" :edit="edit" />
     </ul>
