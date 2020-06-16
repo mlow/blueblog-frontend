@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-model="displayed" @blur="active = false;" @focus="focus" />
+  <input type="text" v-model="displayed" @blur="blur" @focus="focus" />
 </template>
 
 <script>
@@ -10,14 +10,15 @@ export default {
     value: Date,
     format: {
       type: String,
-      default: "YYYY-MM-DD HH:mm:ss",
+      default: "YYYY-MM-DD HH:mm",
     },
     placeholder: String,
   },
   data() {
     return {
       active: false,
-      working: "",
+      workingInput: "",
+      workingDate: this.value || new Date(),
     };
   },
   computed: {
@@ -26,27 +27,43 @@ export default {
         if (this.active) {
           return this.working;
         } else {
-          return this.value
-            ? date.format(this.value, this.format)
+          return this.valid()
+            ? date.format(this.workingDate, this.format)
             : "Invalid date";
         }
       },
-      set(modified) {
-        let newValue = modified.trim() ? new Date(modified) : new Date();
-        if (newValue.toString() === "Invalid Date") {
-          this.working = modified;
-          newValue = null;
+      set(input) {
+        this.working = input;
+        this.workingDate = new Date(input);
+        if (this.valid()) {
+          this.$emit("input", this.workingDate);
         }
-        this.$emit("input", newValue);
       },
     },
   },
   methods: {
-    focus() {
-      if (this.value) {
-        this.working = date.format(this.value, this.format);
+    valid() {
+      return this.workingDate.toString() !== "Invalid Date";
+    },
+    reset() {
+      this.workingDate = new Date();
+      this.working = date.format(this.workingDate, this.format);
+      this.$emit("input", this.workingDate);
+    },
+    validate() {
+      if (this.valid()) {
+        this.working = date.format(this.workingDate, this.format);
+      } else if (!this.working) {
+        this.reset();
       }
+    },
+    focus() {
+      this.validate();
       this.active = true;
+    },
+    blur() {
+      this.validate();
+      this.active = false;
     },
   },
 };
