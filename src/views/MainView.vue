@@ -45,17 +45,21 @@ import {
   deletePost,
 } from "../graphql/posts.gql";
 
+function emptyPost() {
+  return {
+    id: undefined,
+    title: "",
+    content: "",
+    publish_date: undefined,
+  };
+}
+
 export default {
   name: "Main",
   data() {
     return {
       authoring: false,
-      authoring_post: {
-        id: null,
-        title: "",
-        content: "",
-        publish_date: new Date(),
-      },
+      authoring_post: emptyPost(),
       posts: [],
     };
   },
@@ -154,10 +158,7 @@ Are you sure?`)
         })
         .then(() => {
           this.authoring = false;
-          this.authoring_post = {
-            title: "",
-            content: "",
-          };
+          this.authoring_post = emptyPost();
         })
         .catch((error) => alert(error));
     },
