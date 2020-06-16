@@ -58,8 +58,24 @@ export default {
   },
   methods: {
     saveEvent() {
+      if (!this.post.title.trim()) {
+        this.error = "The title cannot be empty.";
+        return;
+      } else if (!this.post.content.trim()) {
+        this.error = "The post cannot be empty.";
+        return;
+      }
+
       if (this.id) {
-        this.$emit("edit", this.id, this.post);
+        if (
+          this.title === this.post.title &&
+          this.content === this.post.content &&
+          this.publish_date.getTime() == this.post.publish_date.getTime()
+        ) {
+          this.error = "No changes made.";
+        } else {
+          this.$emit("edit", this.id, this.post);
+        }
       } else {
         this.$emit("publish", this.post);
       }
