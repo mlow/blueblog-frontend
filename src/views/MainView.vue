@@ -132,6 +132,7 @@ Are you sure?`)
         })
         .then(() => {
           this.authoring = false;
+          this.authoring_post = emptyPost();
         })
         .catch((error) => alert(error));
     },
