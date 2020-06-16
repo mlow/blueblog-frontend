@@ -2,11 +2,7 @@
   <div id="view:main">
     <span id="user-controls">
       <template v-if="loggedIn">
-        <Icon
-          icon="feather"
-          v-show="!authoring"
-          @click.native="authoring = true"
-        />
+        <Icon icon="feather" v-show="!authoring" @click="authoring = true" />
         <Icon icon="book" />
         <Icon icon="user-profile" />
         <Icon icon="sign-out" route="/logout" />

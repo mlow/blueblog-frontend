@@ -1,5 +1,5 @@
 <template>
-  <span :class="iconClass">
+  <span :class="iconClass" @click="$emit('click')">
     <router-link v-if="route" :to="route">
       <FaIcon :icon="faIcon" :size="size" />
     </router-link>
