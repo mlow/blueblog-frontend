@@ -5,6 +5,7 @@ import store from "./store/store";
 
 import LoginView from "./views/LoginView.vue";
 import MainView from "./views/MainView.vue";
+import ProfileView from "./views/ProfileView.vue";
 
 Vue.use(Router);
 
@@ -21,6 +22,11 @@ const router = new Router({
       path: "/login",
       name: "login",
       component: LoginView,
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: ProfileView,
     },
     {
       path: "/logout",

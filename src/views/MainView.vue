@@ -4,7 +4,7 @@
       <template v-if="loggedIn">
         <Icon icon="feather" v-show="!authoring" @click="authoring = true" />
         <Icon icon="book" />
-        <Icon icon="user-profile" />
+        <Icon icon="user-profile" route="/profile" />
         <Icon icon="sign-out" route="/logout" />
       </template>
       <Icon v-else icon="sign-in" route="/login" />

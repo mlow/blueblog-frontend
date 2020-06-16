@@ -4,6 +4,7 @@ import { apollo } from "@/apollo";
 import gql from "graphql-tag";
 
 export const state = {
+  jwt: null,
   userData: null,
 };
 
@@ -11,14 +12,17 @@ export const getters = {
   loggedIn: (state) => {
     return !!state.userData && state.userData.exp * 1000 > Date.now();
   },
+  jwt: (state) => state.jwt,
   userData: (state) => state.userData,
 };
 
 export const mutations = {
-  UPDATE_AUTH_DATA(state, { userData }) {
-    state.userData = userData;
+  UPDATE_AUTH_DATA(state, jwt) {
+    state.jwt = jwt;
+    state.userData = JwtDecode(jwt);
   },
   CLEAR_AUTH_DATA(state) {
+    state.jwt = null;
     state.userData = null;
     Cookies.remove("jwt.header.payload");
   },
@@ -31,25 +35,23 @@ const auth_query = gql`
 `;
 
 export const actions = {
-  initAuth({ commit }) {
+  updateToken({ commit }, jwt) {
+    commit("UPDATE_AUTH_DATA", jwt);
+  },
+  initAuth({ dispatch }) {
     let jwtPayload = Cookies.get("jwt.header.payload");
     if (jwtPayload) {
-      commit("UPDATE_AUTH_DATA", {
-        userData: JwtDecode(jwtPayload),
-      });
+      dispatch("updateToken", jwtPayload);
     }
   },
-  login({ commit }, { username, password }) {
+  login({ dispatch }, { username, password }) {
     return apollo
       .mutate({
         mutation: auth_query,
         variables: { username, password },
       })
       .then(() => {
-        let jwtPayload = Cookies.get("jwt.header.payload");
-        commit("UPDATE_AUTH_DATA", {
-          userData: JwtDecode(jwtPayload),
-        });
+        dispatch("updateToken", Cookies.get("jwt.header.payload"));
       });
   },
   logout({ commit }) {
