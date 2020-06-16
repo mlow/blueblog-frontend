@@ -8,18 +8,8 @@
       <div>
         <h2 class="title">{{ post.title }}</h2>
         <span v-if="owns_post" v-show="hovered" class="post-controls">
-          <FaIcon
-            class="icon"
-            icon="pencil-alt"
-            size="lg"
-            @click="$emit('edit', post)"
-          />
-          <FaIcon
-            class="icon"
-            icon="times"
-            size="lg"
-            @click="$emit('delete', post)"
-          />
+          <Icon icon="edit" @click="$emit('edit', post)" />
+          <Icon icon="delete" @click="$emit('delete', post)" />
         </span>
       </div>
       <div class="publish_date">{{ publish_date_formatted }}</div>
@@ -37,6 +27,7 @@
 <script>
 import date from "date-and-time";
 import VueMarkdown from "vue-markdown";
+import Icon from "./Icon";
 import PostEditList from "./PostEditList";
 
 export default {
@@ -62,6 +53,7 @@ export default {
     },
   },
   components: {
+    Icon,
     VueMarkdown,
     PostEditList,
   },

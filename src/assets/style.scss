@@ -12,13 +12,6 @@ body {
     box-sizing: border-box;
 }
 
-.icon {
-    :hover {
-        color: red;
-        opacity: 0.5;
-    }
-}
-
 #container {
     max-width: 1140px;
     margin: 0 auto;
@@ -27,16 +20,14 @@ body {
 
     #user-controls {
         position: absolute;
-        left: 0%;
-        top: 0.75em;
-        width: 100%;
+        top: 0.5rem;
+        right: 0.5rem;
+
         display: flex;
         justify-content: right;
 
-        padding: 0 1.5rem;
-
-        .control {
-            margin-left: 0.75rem;
+        .icon {
+            margin-left: 0.5rem;
         }
     }
 }
@@ -56,6 +47,7 @@ body {
     margin: 2em 0;
 
     .blog_title {
+        color: indigo;
         margin: 0 auto;
         font-family: "Eat at Joe's St";
 

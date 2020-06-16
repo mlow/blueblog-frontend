@@ -1,18 +1,17 @@
 <template>
   <div id="view:main">
     <span id="user-controls">
-      <FaIcon
-        v-if="loggedIn"
-        v-show="!authoring"
-        class="icon control"
-        icon="feather-alt"
-        size="lg"
-        @click="authoring = true"
-      />
-      <span class="control">
-        <router-link v-if="loggedIn" to="/logout">Logout</router-link>
-        <router-link v-else to="/login">Login</router-link>
-      </span>
+      <template v-if="loggedIn">
+        <Icon
+          icon="feather"
+          v-show="!authoring"
+          @click.native="authoring = true"
+        />
+        <Icon icon="book" />
+        <Icon icon="user-profile" />
+        <Icon icon="sign-out" route="/logout" />
+      </template>
+      <Icon v-else icon="sign-in" route="/login" />
     </span>
     <PostEditor
       v-if="authoring"
@@ -38,6 +37,7 @@
 
 <script>
 import PageLayout from "../layouts/PageLayout.vue";
+import Icon from "../components/Icon.vue";
 import Post from "../components/Post.vue";
 import PostEditor from "../components/PostEditor";
 import { mapGetters } from "vuex";
@@ -180,6 +180,7 @@ Are you sure?`)
     },
   },
   components: {
+    Icon,
     Post,
     PostEditor,
   },
@@ -189,7 +190,7 @@ Are you sure?`)
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .nothing-to-see {
   margin: 2em 0;
   text-align: center;
