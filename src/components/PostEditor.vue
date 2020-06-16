@@ -15,7 +15,8 @@
       <div class="form-group">
         <textarea
           style="width:100%"
-          oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'"
+          ref="content"
+          @input="resizeTextbox"
           v-model="post.content"
           placeholder="Write your thoughts..."
         />
@@ -57,6 +58,10 @@ export default {
     publish_date: Date,
   },
   methods: {
+    resizeTextbox({ target }) {
+      target.style.height = "";
+      target.style.height = target.scrollHeight + "px";
+    },
     saveEvent() {
       if (!this.post.title.trim()) {
         this.error = "The title cannot be empty.";
@@ -85,6 +90,9 @@ export default {
     saveButtonLabel() {
       return this.id ? "Edit" : "Publish";
     },
+  },
+  mounted() {
+    this.resizeTextbox({ target: this.$refs.content });
   },
   components: {
     PostDraft,
