@@ -56,6 +56,7 @@ export default {
 
 <style lang="scss">
 .changes {
+  white-space: pre-wrap;
   ins {
     text-decoration: none;
     color: green;
