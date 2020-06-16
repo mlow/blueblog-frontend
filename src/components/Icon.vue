@@ -8,6 +8,16 @@
 </template>
 
 <script>
+const ICONS = {
+  feather: "feather-alt",
+  book: "book",
+  edit: "pencil-alt",
+  delete: "times",
+  "user-profile": "user",
+  "sign-in": "sign-in-alt",
+  "sign-out": "sign-out-alt",
+};
+
 export default {
   props: {
     icon: String,
@@ -22,24 +32,7 @@ export default {
       return ["icon", "icon-" + this.icon];
     },
     faIcon() {
-      switch (this.icon) {
-        case "feather":
-          return "feather-alt";
-        case "book":
-          return "book";
-        case "edit":
-          return "pencil-alt";
-        case "delete":
-          return "times";
-        case "user-profile":
-          return "user";
-        case "sign-out":
-          return "sign-out-alt";
-        case "sign-in":
-          return "sign-in-alt";
-        default:
-          return undefined;
-      }
+      return ICONS[this.icon];
     },
   },
 };
