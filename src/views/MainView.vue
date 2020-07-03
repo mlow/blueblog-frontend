@@ -142,7 +142,6 @@ Are you sure?`)
           mutation: createPost,
           variables: {
             input: {
-              author_id: this.$store.getters.userData.author.id,
               ...post,
             },
           },

@@ -79,7 +79,6 @@ export default {
         .mutate({
           mutation: updateAuthor,
           variables: {
-            id: this.$store.getters.userData.sub,
             input: this.input,
           },
         })

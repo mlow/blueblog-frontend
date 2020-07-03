@@ -1,5 +1,5 @@
-mutation updateAuthor($id: ID!, $input: UpdateAuthorInput!) {
-  updateAuthor(id: $id, input: $input) {
+mutation updateAuthor($input: UpdateAuthorInput!) {
+  updateAuthor(input: $input) {
     name
   }
 }
