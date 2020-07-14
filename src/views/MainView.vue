@@ -1,14 +1,5 @@
 <template>
   <div id="view:main">
-    <span id="user-controls">
-      <template v-if="loggedIn">
-        <Icon icon="feather" v-show="!authoring" @click="authoring = true" />
-        <Icon icon="book" />
-        <Icon icon="user-profile" route="/profile" />
-        <Icon icon="sign-out" route="/logout" />
-      </template>
-      <Icon v-else icon="sign-in" route="/login" />
-    </span>
     <PostEditor
       v-if="authoring"
       v-bind="authoring_post"
@@ -32,8 +23,7 @@
 </template>
 
 <script>
-import PageLayout from "../layouts/PageLayout.vue";
-import Icon from "../components/Icon.vue";
+import MainLayout from "../layouts/MainLayout.vue";
 import Post from "../components/Post.vue";
 import PostEditor from "../components/PostEditor";
 import { mapGetters } from "vuex";
@@ -177,12 +167,11 @@ Are you sure?`)
     },
   },
   components: {
-    Icon,
     Post,
     PostEditor,
   },
   created() {
-    this.$emit("update:layout", PageLayout);
+    this.$emit("update:layout", MainLayout);
   },
 };
 </script>
