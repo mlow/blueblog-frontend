@@ -1,11 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
-
 import store from "./store/store";
 
-import LoginView from "./views/LoginView.vue";
-import MainView from "./views/MainView.vue";
-import ProfileView from "./views/ProfileView.vue";
+import MainLayout from "./layouts/MainLayout.vue";
+import BlogPostView from "./views/BlogPostView.vue";
 
 Vue.use(Router);
 
@@ -14,19 +12,14 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: "",
-      name: "main",
-      component: MainView,
-    },
-    {
       path: "/login",
       name: "login",
-      component: LoginView,
+      component: () => import("./views/LoginView.vue"),
     },
     {
       path: "/profile",
       name: "profile",
-      component: ProfileView,
+      ccomponent: () => import("./views/ProfileView.vue"),
     },
     {
       path: "/logout",
@@ -35,12 +28,23 @@ const router = new Router({
         store.dispatch("logout");
       },
     },
+    {
+      path: "/",
+      component: MainLayout,
+      children: [
+        {
+          path: "/:post_id?/:post_slug?",
+          name: "main",
+          component: BlogPostView,
+        },
+      ],
+    },
   ],
 });
 
 router.beforeEach((to, from, next) => {
   if (store.getters.loggedIn && to.name == "login") {
-    next({ name: "" });
+    next({ name: "main" });
   }
   next();
 });

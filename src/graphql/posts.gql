@@ -1,35 +1,68 @@
-fragment postDetails on Post {
+fragment postDetail on BlogPost {
   id
   title
   content
   publish_date
-  author {
-    id
-  }
-  edits {
-    id
-    date
+  slug
+  cursor
+  author_id
+}
+
+query GetPost($id: ID!) {
+  blog_post(id: $id) {
+    ...postDetail
   }
 }
 
-query getPosts {
-  posts {
-    ...postDetails
+query GetPosts {
+  blog_posts(pager: { first: 2 }) {
+    afterEdges {
+      cursor
+      node {
+        ...postDetail
+      }
+    }
+    pageInfo {
+      hasNextPage
+    }
   }
 }
 
-mutation createPost($input: CreatePostInput!) {
-  post: createPost(input: $input) {
-    ...postDetails
+query GetAdjacentPosts($cursor: String!) {
+  blog_posts(pager: { after: $cursor, first: 1, before: $cursor, last: 1 }) {
+    beforeEdges {
+      node {
+        ...postDetail
+      }
+      cursor
+    }
+    afterEdges {
+      node {
+        ...postDetail
+      }
+      cursor
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
   }
 }
 
-mutation editPost($id: ID!, $input: UpdatePostInput!) {
-  post: updatePost(id: $id, input: $input) {
-    ...postDetails
+mutation CreatePost($input: CreatePostInput!) {
+  post: create_blog_post(input: $input) {
+    ...postDetail
   }
 }
 
-mutation deletePost($id: ID!) {
-  id: deletePost(id: $id)
+mutation EditPost($id: ID!, $input: UpdatePostInput!) {
+  post: update_blog_post(id: $id, input: $input) {
+    ...postDetail
+  }
+}
+
+mutation DeletePost($id: ID!) {
+  id: delete_blog_post(id: $id)
 }

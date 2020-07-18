@@ -9,7 +9,7 @@
         <h2 class="title">{{ post.title }}</h2>
         <span v-if="owns_post" v-show="hovered" class="post-controls">
           <Icon icon="edit" @click="$emit('edit', post)" />
-          <Icon icon="delete" @click="$emit('delete', post)" />
+          <Icon icon="delete" @click="this.delete" />
         </span>
       </div>
       <div class="publish_date">{{ publish_date_formatted }}</div>
@@ -29,6 +29,7 @@ import date from "date-and-time";
 import VueMarkdown from "vue-markdown";
 import Icon from "./Icon";
 import PostEditList from "./PostEditList";
+import { DeletePost } from "../graphql/posts.gql";
 
 export default {
   data() {
@@ -43,13 +44,42 @@ export default {
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.post.publish_date, "D MMMM YYYY");
+      return date.format(this.post.publish_date, "MMMM D, YYYY");
     },
     owns_post() {
       return (
         this.$store.getters.loggedIn &&
-        this.$store.getters.userData.sub == this.post.author.id
+        this.$store.getters.userData.sub == this.post.author_id
       );
+    },
+  },
+  methods: {
+    delete() {
+      if (
+        !window.confirm(`\
+You are about to delete the post:
+
+    ${this.post.title}
+
+Are you sure?`)
+      ) {
+        return;
+      }
+      this.$apollo
+        .mutate({
+          mutation: DeletePost,
+          variables: {
+            id: this.post.id,
+          },
+          update: (store, data) => {
+            console.log(store);
+            console.log(data);
+          },
+        })
+        .then(() => {
+          this.$emit("deleted");
+        })
+        .catch((error) => alert(error));
     },
   },
   components: {
@@ -62,8 +92,7 @@ export default {
 
 <style lang="scss">
 article.post {
-  font-family: "GL Erekles Stamba";
-  margin: 3rem 0;
+  margin: 2.5rem 1.5rem;
 
   header {
     .title {

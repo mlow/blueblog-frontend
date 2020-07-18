@@ -15,7 +15,7 @@
         <span class="blog_title">Blue Blog</span>
       </header>
 
-      <slot />
+      <router-view />
     </div>
   </div>
 </template>
@@ -25,6 +25,8 @@ import Icon from "../components/Icon.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "MainLayout",
+  data: () => ({ authoring: false }),
   computed: {
     ...mapGetters(["loggedIn"]),
   },

@@ -1,5 +1,5 @@
 mutation updateAuthor($input: UpdateAuthorInput!) {
-  updateAuthor(input: $input) {
+  update_author(input: $input) {
     name
   }
 }
