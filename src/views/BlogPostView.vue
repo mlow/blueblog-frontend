@@ -12,22 +12,74 @@
 <script>
 import Post from "../components/Post.vue";
 import PrevNextNavigate from "../components/PrevNextNavigate.vue";
-import { GetPost, GetPosts, GetAdjacentPosts } from "../graphql/posts.gql";
+import { GetPost, GetPosts } from "../graphql/posts.gql";
+
+function fixDate(obj, prop) {
+  obj[prop] = new Date(obj[prop]);
+  return obj;
+}
 
 export default {
   name: "BlogPostView",
   data() {
     return {
-      current: null,
-      previous: null,
-      next: null,
+      posts: [],
+      index: 0,
+      forcedRecompute: 0,
     };
+  },
+  computed: {
+    current: {
+      get() {
+        this.forcedRecompute;
+        const post = this.posts[this.index];
+        if (post) {
+          window.document.title = post.title;
+        }
+        return post;
+      },
+      set(value) {
+        this.posts[this.index] = value;
+        this.recompute();
+      },
+    },
+    previous: {
+      get() {
+        this.forcedRecompute;
+        return this.posts[this.index - 1];
+      },
+      set(value) {
+        if (this.index == 0) {
+          // If we're at the beginning, prepend entry to list and bump index
+          this.posts.unshift(value);
+          this.index++;
+        } else {
+          this.posts[this.index - 1] = value;
+          this.recompute();
+        }
+      },
+    },
+    next: {
+      get() {
+        this.forcedRecompute;
+        return this.posts[this.index + 1];
+      },
+      set(value) {
+        this.posts[this.index + 1] = value;
+        this.recompute();
+      },
+    },
   },
   methods: {
     getLatestPost() {
       this.$apollo
         .query({
           query: GetPosts,
+          variables: {
+            before: 0,
+            after: 2,
+          },
+          fetchPolicy: "no-cache",
         })
         .then(
           ({
@@ -38,12 +90,10 @@ export default {
             },
           }) => {
             if (firstPost !== undefined) {
-              this.current = firstPost.node;
-              this.current.publish_date = new Date(firstPost.node.publish_date);
+              this.current = fixDate(firstPost.node, "publish_date");
             }
             if (nextPost !== undefined) {
-              this.next = nextPost.node;
-              this.next.publish_date = new Date(nextPost.node.publish_date);
+              this.next = fixDate(nextPost.node, "publish_date");
             }
           }
         )
@@ -51,28 +101,36 @@ export default {
           alert(`Error fetching post: ${error.message}`);
         });
     },
-    getRoutedPost() {
+    getPost(id) {
       return this.$apollo
         .query({
           query: GetPost,
-          variables: { id: this.$route.params.post_id },
+          variables: { id },
         })
         .then(({ data: { blog_post: post } }) => {
-          this.current = post;
-          this.current.publish_date = new Date(post.publish_date);
+          this.current = fixDate(post, "publish_date");
           window.history.replaceState(null, "", `/${post.id}/${post.slug}`);
         })
+        .then(() => this.updateAdjacentPosts())
         .catch((error) => {
           alert(`Error fetching post: ${error.message}`);
         });
     },
-    getAdjacentPosts() {
+    updateAdjacentPosts() {
+      const before = !this.previous;
+      const after = !this.next;
+      if (!(before || after)) {
+        return;
+      }
       this.$apollo
         .query({
-          query: GetAdjacentPosts,
+          query: GetPosts,
           variables: {
             cursor: this.current.cursor,
+            before: before ? 1 : 0,
+            after: after ? 1 : 0,
           },
+          fetchPolicy: "no-cache",
         })
         .then(
           ({
@@ -84,16 +142,14 @@ export default {
             },
           }) => {
             if (previous !== undefined) {
-              this.previous = previous.node;
-              this.previous.publish_date = new Date(previous.node.publish_date);
-            } else {
+              this.previous = fixDate(previous.node, "publish_date");
+            } else if (before) {
               // if requested before but there was none, set previous to null
               this.previous = null;
             }
             if (next !== undefined) {
-              this.next = next.node;
-              this.next.publish_date = new Date(next.node.publish_date);
-            } else {
+              this.next = fixDate(next.node, "publish_date");
+            } else if (after) {
               // if requested after but there was none, set next to null
               this.next = null;
             }
@@ -104,37 +160,38 @@ export default {
         });
     },
     postDeleted() {
-      alert("Post deleted!");
-      this.current = null;
-      if (this.next !== null) {
-        this.current = this.next;
-        this.getAdjacentPosts();
-      } else if (this.previous !== null) {
-        this.current = this.previous;
-        this.getAdjacentPosts();
+      // delete the current post
+      this.posts.splice(this.index, 1);
+      if (this.index > 0) {
+        // move to the previous post if there is one
+        this.index--;
       }
+      alert("Post deleted!");
+    },
+    recompute() {
+      this.forcedRecompute++;
     },
   },
   watch: {
+    index() {
+      this.updateAdjacentPosts();
+    },
     "$route.params.post_id"(post_id) {
       if (!!this.next && this.next.id == post_id) {
-        this.current = this.next;
-        this.getAdjacentPosts();
+        this.index++;
       } else if (!!this.previous && this.previous.id == post_id) {
-        this.current = this.previous;
-        this.getAdjacentPosts();
+        this.index--;
       } else {
         // post not already cached, fetch it
-        this.getRoutedPost().then(() => this.getAdjacentPosts());
+        this.getPost(post_id);
       }
-      console.log(this.$apollo);
     },
   },
-  mounted() {
-    if (!this.$route.params.post_id) {
-      this.getLatestPost();
+  created() {
+    if (this.$route.params.post_id) {
+      this.getPost(this.$route.params.post_id);
     } else {
-      this.getRoutedPost().then(() => this.getAdjacentPosts());
+      this.getLatestPost();
     }
   },
   components: {

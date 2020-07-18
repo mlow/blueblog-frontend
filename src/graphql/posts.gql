@@ -14,22 +14,10 @@ query GetPost($id: ID!) {
   }
 }
 
-query GetPosts {
-  blog_posts(pager: { first: 2 }) {
-    afterEdges {
-      cursor
-      node {
-        ...postDetail
-      }
-    }
-    pageInfo {
-      hasNextPage
-    }
-  }
-}
-
-query GetAdjacentPosts($cursor: String!) {
-  blog_posts(pager: { after: $cursor, first: 1, before: $cursor, last: 1 }) {
+query GetPosts($cursor: String, $before: Int!, $after: Int!) {
+  blog_posts(
+    pager: { after: $cursor, first: $after, before: $cursor, last: $before }
+  ) {
     beforeEdges {
       node {
         ...postDetail
@@ -41,12 +29,6 @@ query GetAdjacentPosts($cursor: String!) {
         ...postDetail
       }
       cursor
-    }
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
     }
   }
 }
