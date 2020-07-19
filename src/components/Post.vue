@@ -71,10 +71,6 @@ Are you sure?`)
           variables: {
             id: this.post.id,
           },
-          update: (store, data) => {
-            console.log(store);
-            console.log(data);
-          },
         })
         .then(() => {
           this.$emit("deleted");
@@ -91,7 +87,7 @@ Are you sure?`)
 </script>
 
 <style lang="scss">
-article.post {
+.post {
   margin: 2.5rem 1.5rem;
 
   header {
