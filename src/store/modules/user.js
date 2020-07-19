@@ -3,10 +3,10 @@ import JwtDecode from "jwt-decode";
 import { apollo } from "@/apollo";
 import gql from "graphql-tag";
 
-export const state = {
+export const state = () => ({
   jwt: null,
   userData: null,
-};
+});
 
 export const getters = {
   loggedIn: (state) => {
