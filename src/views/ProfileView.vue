@@ -37,8 +37,6 @@
 </template>
 
 <script>
-import BlankLayout from "../layouts/BlankLayout";
-
 import { updateAuthor } from "../graphql/author.gql";
 
 export default {
@@ -97,9 +95,6 @@ export default {
     cancel() {
       this.$router.push({ name: "main" });
     },
-  },
-  created() {
-    this.$emit("update:layout", BlankLayout);
   },
 };
 </script>

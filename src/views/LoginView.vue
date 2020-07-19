@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import BlankLayout from "../layouts/BlankLayout";
-
 export default {
   data() {
     return {
@@ -53,9 +51,6 @@ export default {
     cancel() {
       this.$router.push({ name: "main" });
     },
-  },
-  created() {
-    this.$emit("update:layout", BlankLayout);
   },
 };
 </script>
