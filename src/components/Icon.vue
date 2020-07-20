@@ -25,7 +25,7 @@ export default {
       type: String,
       default: "lg",
     },
-    route: String,
+    route: [String, Object],
   },
   computed: {
     iconClass() {
