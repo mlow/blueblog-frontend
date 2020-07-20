@@ -17,9 +17,13 @@ export default {
   data() {
     return {
       active: false,
-      workingInput: "",
       workingDate: this.value || new Date(),
     };
+  },
+  watch: {
+    value(value) {
+      this.workingDate = value;
+    },
   },
   computed: {
     displayed: {
