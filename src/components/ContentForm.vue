@@ -1,0 +1,59 @@
+<template>
+  <form class="form-control">
+    <slot name="before"></slot>
+    <div class="form-group">
+      <input
+        style="width:100%"
+        type="text"
+        :value="title"
+        @input="$emit('update:title', $event.target.value)"
+        placeholder="Title"
+      />
+    </div>
+    <div class="form-group">
+      <textarea
+        style="width:100%"
+        ref="content"
+        :value="content"
+        @input="$emit('update:content', $event.target.value)"
+        placeholder="Write your thoughts..."
+      />
+    </div>
+    <slot name="after"></slot>
+    <div class="form-group flex flex-between">
+      <span>
+        <button type="button" @click="$emit('submit')">
+          {{ submitLabel }}
+        </button>
+        <span v-if="!!error" class="error">{{ error }}</span>
+      </span>
+      <button type="button" @click="$emit('cancel')">Cancel</button>
+    </div>
+  </form>
+</template>
+
+<script>
+export default {
+  props: {
+    title: String,
+    content: String,
+    error: String,
+    submitLabel: String,
+  },
+  methods: {
+    fitTextareaToContent(target) {
+      target.style.height = "";
+      target.style.height = target.scrollHeight + "px";
+    },
+  },
+  watch: {
+    content: {
+      handler() {
+        setTimeout(() => this.fitTextareaToContent(this.$refs.content));
+      },
+      // immediate so this gets fired upon creation as well
+      immediate: true,
+    },
+  },
+};
+</script>
