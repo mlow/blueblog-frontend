@@ -1,4 +1,4 @@
-import { GetPost, GetPosts } from "@/graphql/posts.gql";
+import { GetPost, GetPosts } from "@/graphql/blog_post.gql";
 import { apollo } from "@/apollo";
 
 export const namespaced = true;

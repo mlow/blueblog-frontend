@@ -32,7 +32,7 @@ import date from "date-and-time";
 import VueMarkdown from "vue-markdown";
 import Icon from "./Icon";
 import PostEditList from "./PostEditList";
-import { DeletePost } from "../graphql/posts.gql";
+import { DeletePost } from "../graphql/blog_post.gql";
 
 export default {
   data() {

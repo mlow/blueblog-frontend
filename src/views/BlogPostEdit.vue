@@ -36,7 +36,7 @@
 <script>
 import PostDraft from "../components/PostDraft";
 import DateTimeInput from "../components/DateTimeInput";
-import { EditPost } from "../graphql/posts.gql";
+import { EditPost } from "../graphql/blog_post.gql";
 
 export default {
   name: "BlogPostEdit",
