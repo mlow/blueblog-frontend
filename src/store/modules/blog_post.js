@@ -10,8 +10,8 @@ export const state = () => ({
 });
 
 export const getters = {
-  blogPostByIndex: (state) => (index) => state.posts[index],
-  blogPostByID: (state) => (id) => {
+  byIndex: (state) => (index) => state.posts[index],
+  byID: (state) => (id) => {
     return state.posts.find((post) => post.id === id);
   },
   current: (state) => state.posts[state.index],
@@ -145,11 +145,17 @@ export const actions = {
         alert(`Error fetching post: ${error.message}`);
       });
   },
-  async fetchById({ commit, dispatch, state }, id, cacheAndUpdateIndex = true) {
+  async fetchByID(
+    { commit, dispatch, state },
+    { id, cacheAndUpdateIndex = true }
+  ) {
     const indexOf = state.posts.findIndex((post) => id === post.id);
     if (indexOf >= 0) {
-      commit("SET_INDEX", indexOf);
-      return;
+      if (cacheAndUpdateIndex) {
+        commit("SET_INDEX", indexOf);
+        dispatch("updateAdjacent");
+      }
+      return Promise.resolve(state.posts[indexOf]);
     }
     return apollo
       .query({
@@ -161,9 +167,10 @@ export const actions = {
         if (cacheAndUpdateIndex) {
           commit("CLEAR");
           commit("SET", { post: fromResp(post), index: 0 });
+          dispatch("updateAdjacent");
         }
+        return fromResp(post);
       })
-      .then(() => dispatch("updateAdjacent"))
       .catch((error) => {
         alert(`Error fetching post by ID ${id}: ${error.message}`);
       });

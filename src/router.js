@@ -19,7 +19,7 @@ const router = new Router({
     {
       path: "/profile",
       name: "profile",
-      ccomponent: () => import("./views/ProfileView.vue"),
+      component: () => import("./views/ProfileView.vue"),
     },
     {
       path: "/logout",
@@ -29,11 +29,22 @@ const router = new Router({
       },
     },
     {
+      path: "/edit",
+      component: MainLayout,
+      children: [
+        {
+          path: ":id",
+          name: "edit",
+          component: () => import("./views/BlogPostEdit.vue"),
+        },
+      ],
+    },
+    {
       path: "/",
       component: MainLayout,
       children: [
         {
-          path: "/:post_id?/:post_slug?",
+          path: "/:id?/:slug?",
           name: "main",
           component: BlogPostView,
         },

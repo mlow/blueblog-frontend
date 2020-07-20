@@ -33,13 +33,13 @@ query GetPosts($cursor: String, $before: Int!, $after: Int!) {
   }
 }
 
-mutation CreatePost($input: CreatePostInput!) {
+mutation CreatePost($input: CreateBlogPostInput!) {
   post: create_blog_post(input: $input) {
     ...postDetail
   }
 }
 
-mutation EditPost($id: ID!, $input: UpdatePostInput!) {
+mutation EditPost($id: ID!, $input: UpdateBlogPostInput!) {
   post: update_blog_post(id: $id, input: $input) {
     ...postDetail
   }

@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.publish_date || new Date(), "ddd, MMM D, YYYY");
+      return date.format(this.publish_date ?? new Date(), "MMM D, YYYY");
     },
     draft_title() {
       return this.title || "Title";

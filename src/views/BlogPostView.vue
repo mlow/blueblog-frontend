@@ -24,7 +24,7 @@ export default {
       "incIndex",
       "decIndex",
       "delete",
-      "fetchById",
+      "fetchByID",
       "fetchLatest",
     ]),
     postDeleted() {
@@ -33,23 +33,31 @@ export default {
     },
   },
   watch: {
-    "$route.params.post_id"(post_id) {
+    "$route.params.id"(post_id) {
       if (!!this.next && this.next.id == post_id) {
         this.incIndex();
       } else if (!!this.previous && this.previous.id == post_id) {
         this.decIndex();
       } else {
         // post not already cached, fetch it
-        this.fetchById(post_id);
+        this.fetchByID({ id: post_id });
       }
     },
   },
   created() {
-    if (this.$route.params.post_id) {
-      this.fetchById(this.$route.params.post_id);
+    if (this.$route.params.id) {
+      this.fetchByID({ id: this.$route.params.id });
     } else {
       this.fetchLatest();
     }
+
+    // watch for change to current post and update window title accordingly
+    this.$store.watch(
+      (_, getters) => getters["blog_post/current"],
+      ({ title }) => {
+        document.title = title;
+      }
+    );
   },
   components: {
     Post,
