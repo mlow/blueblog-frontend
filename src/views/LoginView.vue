@@ -49,7 +49,11 @@ export default {
         });
     },
     cancel() {
-      this.$router.push({ name: "main" });
+      if (window.history.length > 1) {
+        this.$router.go(-1);
+      } else {
+        this.$router.push({ name: "main" });
+      }
     },
   },
 };
@@ -62,7 +66,6 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  overflow: auto;
 }
 
 form {
