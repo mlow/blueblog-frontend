@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
+import { getEditChanges } from "../graphql/edit.gql";
 
 export default {
   data() {
@@ -33,19 +33,7 @@ export default {
   },
   apollo: {
     edit: {
-      query: gql`
-        query getEditChanges($edit_id: ID!) {
-          edit: node(id: $edit_id) {
-            ... on PostEdit {
-              changes {
-                text
-                added
-                removed
-              }
-            }
-          }
-        }
-      `,
+      query: getEditChanges,
       variables() {
         return { edit_id: this.edit_id };
       },

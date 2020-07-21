@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import JwtDecode from "jwt-decode";
 import { apollo } from "@/apollo";
-import gql from "graphql-tag";
+import { authenticate } from "@/graphql/auth.gql";
 
 export const state = () => ({
   jwt: null,
@@ -28,12 +28,6 @@ export const mutations = {
   },
 };
 
-const auth_query = gql`
-  mutation authenticate($username: String!, $password: String!) {
-    authenticate(username: $username, password: $password)
-  }
-`;
-
 export const actions = {
   updateToken({ commit }, jwt) {
     commit("UPDATE_AUTH_DATA", jwt);
@@ -47,7 +41,7 @@ export const actions = {
   login({ dispatch }, { username, password }) {
     return apollo
       .mutate({
-        mutation: auth_query,
+        mutation: authenticate,
         variables: { username, password },
       })
       .then(() => {

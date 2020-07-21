@@ -1,0 +1,11 @@
+query getEditChanges($edit_id: ID!) {
+  edit: node(id: $edit_id) {
+    ... on Edit {
+      changes {
+        text
+        added
+        removed
+      }
+    }
+  }
+}
