@@ -8,18 +8,13 @@
       <div>
         <h2 class="title">{{ post.title }}</h2>
         <span v-if="owns_post" v-show="hovered" class="post-controls">
-          <Icon
-            icon="edit"
-            :route="{ name: 'edit', params: { id: post.id } }"
-          />
+          <Icon icon="edit" :route="{ name: 'edit', params: { id: post.id } }" />
           <Icon icon="delete" @click="this.delete" />
         </span>
       </div>
       <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
-    <div class="content">
-      <VueMarkdown :source="post.content"></VueMarkdown>
-    </div>
+    <div class="content" v-html="post.content" />
     <PostEditList
       v-if="post.edits && post.edits.length && this.owns_post"
       :edits="post.edits"
@@ -29,7 +24,6 @@
 
 <script>
 import date from "date-and-time";
-import VueMarkdown from "vue-markdown";
 import Icon from "./Icon";
 import PostEditList from "./PostEditList";
 import { DeletePost } from "../graphql/blog_post.gql";
@@ -83,7 +77,6 @@ Are you sure?`)
   },
   components: {
     Icon,
-    VueMarkdown,
     PostEditList,
   },
 };

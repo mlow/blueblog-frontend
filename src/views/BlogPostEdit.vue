@@ -22,7 +22,7 @@
 import PostDraft from "../components/PostDraft";
 import DateTimeInput from "../components/DateTimeInput";
 import ContentForm from "../components/ContentForm";
-import { EditPost } from "../graphql/blog_post.gql";
+import { GetPostForEdit, EditPost } from "../graphql/blog_post.gql";
 
 export default {
   name: "BlogPostEdit",
@@ -36,6 +36,11 @@ export default {
       },
       error: undefined,
     };
+  },
+  computed: {
+    post_id() {
+      return this.$route.params.id;
+    },
   },
   methods: {
     save() {
@@ -60,8 +65,27 @@ export default {
         .mutate({
           mutation: EditPost,
           variables: {
-            id: this.post.id,
+            id: this.post_id,
             input: this.draft,
+          },
+          update: (store, { data: { post } }) => {
+            const { blog_post: cached } = store.readQuery({
+              query: GetPostForEdit,
+              variables: { id: post.id },
+            });
+            Object.keys(cached)
+              .filter((key) => key !== "content")
+              .forEach((key) => (cached[key] = post[key]));
+            store.writeQuery({
+              query: GetPostForEdit,
+              variables: { id: post.id },
+              data: {
+                blog_post: {
+                  ...cached,
+                  content: this.draft.content,
+                },
+              },
+            });
           },
         })
         .then(({ data: { post } }) => {
@@ -82,21 +106,31 @@ export default {
     cancel() {
       this.$router.push({
         name: "main",
-        params: { id: this.post.id, slug: this.post.slug },
+        params: { id: this.post_id, slug: this.post.slug },
       });
     },
   },
-  mounted() {
-    this.$store
-      .dispatch("blog_post/fetchByID", {
-        id: this.$route.params.id,
-      })
-      .then((post) => {
-        this.post = post;
-        Object.keys(this.draft).forEach((key) => {
-          this.draft[key] = post[key];
-        });
-      });
+  apollo: {
+    post: {
+      manual: true,
+      query: GetPostForEdit,
+      variables() {
+        return { id: this.post_id };
+      },
+      result({
+        data: {
+          blog_post: { title, slug, content, publish_date },
+        },
+      }) {
+        this.post = {
+          title,
+          slug,
+          content,
+          publish_date: new Date(publish_date),
+        };
+        this.draft = { title, content, publish_date: new Date(publish_date) };
+      },
+    },
   },
   components: {
     ContentForm,

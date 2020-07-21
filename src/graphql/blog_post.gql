@@ -1,7 +1,7 @@
 fragment postDetail on BlogPost {
   id
   title
-  content
+  content(format: HTML)
   publish_date
   slug
   cursor
@@ -11,6 +11,15 @@ fragment postDetail on BlogPost {
 query GetPost($id: ID!) {
   blog_post(id: $id) {
     ...postDetail
+  }
+}
+
+query GetPostForEdit($id: ID!) {
+  blog_post(id: $id) {
+    title
+    content(format: MARKDOWN)
+    publish_date
+    slug
   }
 }
 
