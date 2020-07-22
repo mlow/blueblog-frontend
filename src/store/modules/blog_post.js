@@ -66,6 +66,14 @@ export const actions = {
     commit("SET_INDEX", state.index - 1);
     dispatch("updateAdjacent");
   },
+  flushWithNewPost({ commit, dispatch }, post) {
+    commit("CLEAR");
+    commit("SET", {
+      index: 0,
+      post,
+    });
+    dispatch("updateAdjacent");
+  },
   updateAdjacent({ commit, state, getters }) {
     // fetches the posts adjacent to the index
     const before = !getters.previous;

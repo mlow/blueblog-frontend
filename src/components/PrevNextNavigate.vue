@@ -1,8 +1,8 @@
 <template>
   <div>
-    <router-link :to="{ name: 'main', params: this.link_params }">{{
-      this.post.title
-    }}</router-link>
+    <router-link
+      :to="{ name: 'main', params: this.link_params }"
+    >{{ this.post.title }}</router-link>
     <p class="date">{{ this.publish_date_formatted }}</p>
   </div>
 </template>

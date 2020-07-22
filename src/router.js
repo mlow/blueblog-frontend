@@ -33,6 +33,11 @@ const router = new Router({
       component: MainLayout,
       children: [
         {
+          path: "new",
+          name: "blog:new",
+          component: () => import("./views/BlogPostNew.vue"),
+        },
+        {
           path: ":id/edit",
           name: "blog:edit",
           component: () => import("./views/BlogPostEdit.vue"),
