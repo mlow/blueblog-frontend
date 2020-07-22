@@ -7,7 +7,7 @@
     <header>
       <div>
         <h2 class="title">{{ post.title }}</h2>
-        <span v-if="owns_post" v-show="hovered" class="post-controls">
+        <span v-if="ownsPost" v-show="hovered" class="post-controls">
           <Icon
             icon="edit"
             :route="{ name: 'blog:edit', params: { id: post.id } }"
@@ -18,10 +18,7 @@
       <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
     <div class="content" v-html="post.content" />
-    <PostEditList
-      v-if="post.edits && post.edits.length && this.owns_post"
-      :edits="post.edits"
-    />
+    <PostEditList v-if="ownsPost && edits.length > 0" :edits="edits" />
   </article>
 </template>
 
@@ -29,12 +26,13 @@
 import date from "date-and-time";
 import Icon from "./Icon";
 import PostEditList from "./PostEditList";
-import { DeletePost } from "../graphql/blog_post.gql";
+import { DeletePost, GetPostEdits } from "../graphql/blog_post.gql";
 
 export default {
   data() {
     return {
       hovered: false,
+      edits: [],
     };
   },
   props: {
@@ -46,7 +44,7 @@ export default {
     publish_date_formatted() {
       return date.format(this.post.publish_date, "MMMM D, YYYY");
     },
-    owns_post() {
+    ownsPost() {
       return (
         this.$store.getters.loggedIn &&
         this.$store.getters.userData.sub == this.post.author_id
@@ -76,6 +74,20 @@ Are you sure?`)
           this.$emit("deleted");
         })
         .catch((error) => alert(error));
+    },
+  },
+  apollo: {
+    edits: {
+      query: GetPostEdits,
+      variables() {
+        return {
+          id: this.post.id,
+        };
+      },
+      skip() {
+        return !this.ownsPost;
+      },
+      update: ({ blog_post: { edits } }) => edits,
     },
   },
   components: {

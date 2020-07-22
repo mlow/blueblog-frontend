@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     edit_date_formatted() {
-      return date.format(new Date(this.edit.date), "MMM D, YYYY @ hh:mm:ss");
+      return date.format(new Date(this.edit.date), "MMMM D, YYYY - h:mm A");
     },
   },
   components: {

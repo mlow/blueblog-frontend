@@ -14,6 +14,15 @@ query GetPost($id: ID!) {
   }
 }
 
+query GetPostEdits($id: ID!) {
+  blog_post(id: $id) {
+    edits {
+      id
+      date
+    }
+  }
+}
+
 query GetPostForEdit($id: ID!) {
   blog_post(id: $id) {
     title
