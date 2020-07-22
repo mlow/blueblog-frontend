@@ -29,12 +29,12 @@ const router = new Router({
       },
     },
     {
-      path: "/edit",
+      path: "/blog",
       component: MainLayout,
       children: [
         {
-          path: ":id",
-          name: "edit",
+          path: ":id/edit",
+          name: "blog:edit",
           component: () => import("./views/BlogPostEdit.vue"),
         },
       ],

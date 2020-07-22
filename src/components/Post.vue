@@ -8,7 +8,10 @@
       <div>
         <h2 class="title">{{ post.title }}</h2>
         <span v-if="owns_post" v-show="hovered" class="post-controls">
-          <Icon icon="edit" :route="{ name: 'edit', params: { id: post.id } }" />
+          <Icon
+            icon="edit"
+            :route="{ name: 'blog:edit', params: { id: post.id } }"
+          />
           <Icon icon="delete" @click="this.delete" />
         </span>
       </div>
