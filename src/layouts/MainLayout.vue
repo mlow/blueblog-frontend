@@ -2,7 +2,7 @@
   <div id="container" class="paper">
     <span id="user-controls">
       <template v-if="loggedIn">
-        <Icon icon="feather" v-show="!authoring" @click="authoring = true" />
+        <Icon icon="feather" v-show="!authoring" :route="{ name: 'blog:new' }" />
         <Icon icon="book" />
         <Icon icon="user-profile" route="/profile" />
         <Icon icon="sign-out" route="/logout" />
@@ -26,9 +26,9 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "MainLayout",
-  data: () => ({ authoring: false }),
   computed: {
     ...mapGetters(["loggedIn"]),
+    ...mapGetters("ui", ["authoring"]),
   },
   components: {
     Icon,
