@@ -55,8 +55,9 @@ function fromResp(post) {
 }
 
 export const actions = {
-  delete({ commit }) {
+  delete({ commit, dispatch }) {
     commit("DELETE");
+    dispatch("updateAdjacent");
   },
   incIndex({ commit, state, dispatch }) {
     commit("SET_INDEX", state.index + 1);

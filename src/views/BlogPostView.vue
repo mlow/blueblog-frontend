@@ -27,8 +27,14 @@ export default {
       "fetchByID",
       "fetchLatest",
     ]),
-    postDeleted() {
-      this.delete();
+    async postDeleted() {
+      await this.delete();
+      if (this.current && this.$route.params.id) {
+        this.$router.push({
+          name: "main",
+          params: { id: this.current.id, slug: this.current.slug },
+        });
+      }
       alert("Post deleted!");
     },
   },
@@ -38,7 +44,7 @@ export default {
         this.incIndex();
       } else if (!!this.previous && this.previous.id == post_id) {
         this.decIndex();
-      } else {
+      } else if (post_id) {
         // post not already cached, fetch it
         this.fetchByID({ id: post_id });
       }
