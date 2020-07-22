@@ -43,6 +43,14 @@ export default {
         this.fetchByID({ id: post_id });
       }
     },
+    current(post) {
+      if (post) {
+        document.title = post.title;
+        if (this.$route.params.id && this.$route.params.slug !== post.slug) {
+          window.history.replaceState(null, "", `/${post.id}/${post.slug}`);
+        }
+      }
+    },
   },
   created() {
     if (this.$route.params.id) {
@@ -50,14 +58,6 @@ export default {
     } else {
       this.fetchLatest();
     }
-
-    // watch for change to current post and update window title accordingly
-    this.$store.watch(
-      (_, getters) => getters["blog_post/current"],
-      ({ title }) => {
-        document.title = title;
-      }
-    );
   },
   components: {
     Post,
