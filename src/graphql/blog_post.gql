@@ -8,6 +8,13 @@ fragment postDetail on BlogPost {
   author_id
 }
 
+fragment editList on BlogPost {
+  edits {
+    id
+    date
+  }
+}
+
 query GetPost($id: ID!) {
   blog_post(id: $id) {
     ...postDetail
@@ -16,10 +23,7 @@ query GetPost($id: ID!) {
 
 query GetPostEdits($id: ID!) {
   blog_post(id: $id) {
-    edits {
-      id
-      date
-    }
+    ...editList
   }
 }
 
@@ -60,6 +64,7 @@ mutation CreatePost($input: CreateBlogPostInput!) {
 mutation EditPost($id: ID!, $input: UpdateBlogPostInput!) {
   post: update_blog_post(id: $id, input: $input) {
     ...postDetail
+    ...editList
   }
 }
 

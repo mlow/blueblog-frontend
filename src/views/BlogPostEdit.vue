@@ -22,7 +22,11 @@
 import PostDraft from "../components/PostDraft";
 import DateTimeInput from "../components/DateTimeInput";
 import ContentForm from "../components/ContentForm";
-import { GetPostForEdit, EditPost } from "../graphql/blog_post.gql";
+import {
+  GetPostForEdit,
+  GetPostEdits,
+  EditPost,
+} from "../graphql/blog_post.gql";
 
 export default {
   name: "BlogPostEdit",
@@ -83,6 +87,18 @@ export default {
                 blog_post: {
                   ...cached,
                   content: this.draft.content,
+                },
+              },
+            });
+            // Todo: convert this to writeFragment when graphql-tag/loader
+            // supports importing fragments
+            store.writeQuery({
+              query: GetPostEdits,
+              variables: { id: post.id },
+              data: {
+                blog_post: {
+                  __typename: "BlogPost",
+                  edits: post.edits,
                 },
               },
             });
