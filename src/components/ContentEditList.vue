@@ -5,13 +5,13 @@
       @click="expanded = !expanded"
     >Edits</span>
     <ul v-if="expanded">
-      <PostEditListEntry v-for="edit in edits" :key="edit.id" :edit="edit" />
+      <ContentEditListItem v-for="edit in edits" :key="edit.id" :edit="edit" />
     </ul>
   </div>
 </template>
 
 <script>
-import PostEditListEntry from "./PostEditListEntry";
+import ContentEditListItem from "./ContentEditListItem";
 
 export default {
   data() {
@@ -23,7 +23,7 @@ export default {
     edits: Array,
   },
   components: {
-    PostEditListEntry,
+    ContentEditListItem,
   },
 };
 </script>

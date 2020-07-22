@@ -18,14 +18,13 @@
       <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
     <div class="content" v-html="post.content" />
-    <PostEditList v-if="ownsPost && edits.length > 0" :edits="edits" />
+    <ContentEditList v-if="ownsPost && edits.length > 0" :edits="edits" />
   </article>
 </template>
 
 <script>
 import date from "date-and-time";
 import Icon from "./Icon";
-import PostEditList from "./PostEditList";
 import { DeletePost, GetPostEdits } from "../graphql/blog_post.gql";
 
 export default {
@@ -92,7 +91,7 @@ Are you sure?`)
   },
   components: {
     Icon,
-    PostEditList,
+    ContentEditList: () => import("../components/ContentEditList"),
   },
 };
 </script>

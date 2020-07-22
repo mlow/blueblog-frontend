@@ -1,5 +1,5 @@
 <template>
-  <div class="changes" v-html="changes_formatted" />
+  <div class="changes" v-html="changesAsHtml" />
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
     edit_id: String,
   },
   computed: {
-    changes_formatted() {
+    changesAsHtml() {
       return this.edit.changes
         .map((change) => {
           if (change.added) {

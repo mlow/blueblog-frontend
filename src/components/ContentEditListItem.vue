@@ -5,14 +5,14 @@
   >
     <span>{{ edit_date_formatted }}</span>
     <template v-if="expanded">
-      <PostEditChanges :edit_id="edit.id" />
+      <ContentEditChanges :edit_id="edit.id" />
     </template>
   </li>
 </template>
 
 <script>
 import date from "date-and-time";
-import PostEditChanges from "./PostEditChanges";
+import ContentEditChanges from "./ContentEditChanges";
 
 export default {
   data() {
@@ -29,7 +29,7 @@ export default {
     },
   },
   components: {
-    PostEditChanges,
+    ContentEditChanges,
   },
 };
 </script>
