@@ -1,4 +1,9 @@
+// Global styles
 @import "./fonts.scss";
+
+* {
+  box-sizing: border-box;
+}
 
 body {
   padding: 1rem;
@@ -13,10 +18,6 @@ body {
   width: 100%;
   font-family: "GL Erekles Stamba";
   background: url("~@/assets/images/background.jpg") repeat;
-}
-
-* {
-  box-sizing: border-box;
 }
 
 #container {
