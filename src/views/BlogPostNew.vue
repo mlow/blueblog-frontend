@@ -14,13 +14,13 @@
         </div>
       </template>
     </ContentForm>
-    <PostDraft v-bind="draft" />
+    <PostPreview v-bind="draft" />
   </div>
 </template>
 
 <script>
 import ContentForm from "../components/ContentForm.vue";
-import PostDraft from "../components/PostDraft.vue";
+import PostPreview from "../components/PostPreview.vue";
 import DateTimeInput from "../components/DateTimeInput.vue";
 
 import { CreatePost, GetPostForEdit } from "../graphql/blog_post.gql";
@@ -96,7 +96,7 @@ export default {
   },
   components: {
     ContentForm,
-    PostDraft,
+    PostPreview,
     DateTimeInput,
   },
 };

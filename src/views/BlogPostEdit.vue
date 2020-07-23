@@ -14,12 +14,12 @@
         </div>
       </template>
     </ContentForm>
-    <PostDraft v-bind="draft" />
+    <PostPreview v-bind="draft" />
   </div>
 </template>
 
 <script>
-import PostDraft from "../components/PostDraft";
+import PostPreview from "../components/PostPreview";
 import DateTimeInput from "../components/DateTimeInput";
 import ContentForm from "../components/ContentForm";
 import {
@@ -148,7 +148,7 @@ export default {
   components: {
     ContentForm,
     DateTimeInput,
-    PostDraft,
+    PostPreview,
   },
 };
 </script>
