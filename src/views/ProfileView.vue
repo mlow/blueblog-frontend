@@ -13,12 +13,22 @@
     <div class="form-group">
       <label for="name">Username</label>
       <br />
-      <input type="text" id="name" v-model="input.username" />
+      <input
+        type="text"
+        id="name"
+        :placeholder="userData.author.username"
+        v-model="input.username"
+      />
     </div>
     <div class="form-group">
       <label for="name">Name</label>
       <br />
-      <input type="text" id="name" v-model="input.name" />
+      <input
+        type="text"
+        id="name"
+        :placeholder="userData.author.name"
+        v-model="input.name"
+      />
     </div>
     <div class="form-group" style="margin-top: 1.5rem">
       <label for="new-password">New Password</label>
@@ -43,16 +53,15 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import { updateAuthor } from "../graphql/author.gql";
 
 export default {
   data() {
-    const userData = this.$store.getters.userData;
-
     return {
       input: {
-        name: userData.author.name,
-        username: userData.author.username,
+        name: "",
+        username: "",
         password: "",
         new_password: "",
       },
@@ -60,7 +69,20 @@ export default {
       error: "",
     };
   },
+  computed: {
+    ...mapGetters(["userData"]),
+  },
   methods: {
+    clear() {
+      this.input = {
+        name: "",
+        username: "",
+        password: "",
+        new_password: "",
+      };
+      this.new_password_repeat = "";
+      this.error = "";
+    },
     submit() {
       if (!this.input.password) {
         this.error = "Current password required.";
@@ -70,12 +92,11 @@ export default {
         this.error = "New passwords don't match.";
         return;
       }
-      if (!this.input.username) {
-        this.error = "Username can't be blank.";
-        return;
-      }
-      if (!this.input.name) {
-        this.error = "Name can't be blank.";
+
+      if (
+        !(this.input.new_password || this.input.name || this.input.username)
+      ) {
+        this.error = "No changes to save.";
         return;
       }
 
@@ -83,11 +104,16 @@ export default {
         .mutate({
           mutation: updateAuthor,
           variables: {
-            input: this.input,
+            input: {
+              password: this.input.password,
+              name: this.input.name || null,
+              username: this.input.username || null,
+              new_password: this.input.new_password || null,
+            },
           },
         })
         .then(() => {
-          this.error = "";
+          this.clear();
           alert("Success!");
         })
         .catch((error) => {
