@@ -1,39 +1,45 @@
 <template>
-  <div id="profile-container" class="paper">
-    <form @submit.prevent="submit">
-      <div style="margin-bottom: 1.5rem;">
-        <label for="password">Current Password</label>
-        <input type="password" id="password" v-model="input.password" />
-      </div>
-      <div>
-        <label for="name">Username</label>
-        <input type="text" id="name" v-model="input.username" />
-      </div>
-      <div>
-        <label for="name">Name</label>
-        <input type="text" id="name" v-model="input.name" />
-      </div>
-      <div style="margin-top: 1.5rem">
-        <label for="new-password">New Password</label>
-        <input type="password" id="new-password" v-model="input.new_password" />
-      </div>
-      <div>
-        <label for="new-password-repeat">New Password Repeated</label>
-        <input
-          type="password"
-          id="new-password-repeat"
-          v-model="new_password_repeat"
-        />
-      </div>
-      <div class="form-controls">
-        <span>
-          <button type="submit">Save</button>
-          <span v-if="!!error" v-html="error" class="error" />
-        </span>
-        <button type="button" @click="cancel">Return</button>
-      </div>
-    </form>
-  </div>
+  <form class="form-control" @submit.prevent="submit">
+    <div class="form-group" style="margin-bottom: 1.5rem;">
+      <label for="password">Current Password</label>
+      <br />
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter your current password"
+        v-model="input.password"
+      />
+    </div>
+    <div class="form-group">
+      <label for="name">Username</label>
+      <br />
+      <input type="text" id="name" v-model="input.username" />
+    </div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <br />
+      <input type="text" id="name" v-model="input.name" />
+    </div>
+    <div class="form-group" style="margin-top: 1.5rem">
+      <label for="new-password">New Password</label>
+      <br />
+      <input type="password" id="new-password" v-model="input.new_password" />
+    </div>
+    <div class="form-group">
+      <label for="new-password-repeat">New Password Repeated</label>
+      <br />
+      <input
+        type="password"
+        id="new-password-repeat"
+        v-model="new_password_repeat"
+      />
+    </div>
+    <div style="margin-top: 1rem;" class="form-group flex flex-between">
+      <button type="submit">Save</button>
+      <button type="button" @click="cancel">Return</button>
+    </div>
+    <div style="margin-top: 1rem;" class="error" v-if="error" v-html="error" />
+  </form>
 </template>
 
 <script>
@@ -93,47 +99,10 @@ export default {
         });
     },
     cancel() {
-      if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push({ name: "main" });
-      }
+      this.$router.goBackOrMain();
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-#profile-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-}
-
-form {
-  margin: 2em;
-  div {
-    margin: 8px 0;
-
-    .error {
-      margin-left: 0.75em;
-      color: #ce1111;
-    }
-  }
-
-  div input {
-    width: 100%;
-  }
-
-  div.form-controls {
-    display: flex;
-    justify-content: space-between;
-    margin: 1.5rem -4px -4px -4px;
-    > * {
-      margin: 4px;
-    }
-  }
-}
-</style>
+<style src="@/assets/styles/form.scss" lang="scss" scoped />

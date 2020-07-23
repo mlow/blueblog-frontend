@@ -120,10 +120,7 @@ export default {
         .catch((error) => alert(error));
     },
     cancel() {
-      this.$router.push({
-        name: "main",
-        params: { id: this.post_id, slug: this.post.slug },
-      });
+      this.$router.goBackOrMain();
     },
   },
   apollo: {

@@ -3,6 +3,7 @@ import Router from "vue-router";
 import store from "./store/store";
 
 import MainLayout from "./layouts/MainLayout.vue";
+import CenterFormLayout from "./layouts/CenterFormLayout.vue";
 import BlogPostView from "./views/BlogPostView.vue";
 
 Vue.use(Router);
@@ -13,13 +14,25 @@ const router = new Router({
   routes: [
     {
       path: "/login",
-      name: "login",
-      component: () => import("./views/LoginView.vue"),
+      component: CenterFormLayout,
+      children: [
+        {
+          path: "",
+          name: "login",
+          component: () => import("./views/LoginView.vue"),
+        },
+      ],
     },
     {
       path: "/profile",
-      name: "profile",
-      component: () => import("./views/ProfileView.vue"),
+      component: CenterFormLayout,
+      children: [
+        {
+          path: "",
+          name: "profile",
+          component: () => import("./views/ProfileView.vue"),
+        },
+      ],
     },
     {
       path: "/logout",
@@ -57,6 +70,14 @@ const router = new Router({
     },
   ],
 });
+
+Router.prototype.goBackOrMain = function() {
+  if (window.history.length > 1) {
+    this.go(-1);
+  } else {
+    this.push({ name: "main" });
+  }
+};
 
 router.beforeEach((to, from, next) => {
   if (store.getters.loggedIn && to.name == "login") {

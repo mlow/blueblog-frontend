@@ -83,11 +83,7 @@ export default {
         .catch((error) => (this.error = error.message));
     },
     cancel() {
-      if (window.history.length > 1) {
-        this.$router.go(-1);
-      } else {
-        this.$router.push({ name: "main" });
-      }
+      this.$router.goBackOrMain();
     },
     ...mapActions("ui", ["setAuthoring"]),
   },

@@ -22,9 +22,7 @@
     <slot name="after"></slot>
     <div class="form-group flex flex-between">
       <span>
-        <button type="button" @click="$emit('submit')">
-          {{ submitLabel }}
-        </button>
+        <button type="button" @click="$emit('submit')">{{ submitLabel }}</button>
         <span v-if="!!error" class="error">{{ error }}</span>
       </span>
       <button type="button" @click="$emit('cancel')">Cancel</button>
@@ -57,3 +55,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import "@/assets/styles/form.scss";
+</style>
