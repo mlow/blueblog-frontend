@@ -1,6 +1,6 @@
 <template>
-  <div id="container" class="paper">
-    <span id="user-controls">
+  <div class="paper container">
+    <span class="user-controls">
       <template v-if="loggedIn">
         <Icon icon="feather" v-show="!authoring" :route="{ name: 'blog:new' }" />
         <Icon icon="book" />
@@ -10,10 +10,8 @@
       <Icon v-else icon="sign-in" route="/login" />
     </span>
 
-    <div id="content">
-      <header id="header">
-        <span class="blog_title">Blue Blog</span>
-      </header>
+    <div class="content">
+      <header class="logo">Blue Blog</header>
 
       <router-view />
     </div>
