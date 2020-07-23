@@ -67,19 +67,6 @@ body {
   line-height: 1em;
 }
 
-#posts {
-  > :not(:last-child):after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    margin-left: -109px;
-    background: url("~@/assets/scroll.svg") no-repeat;
-    width: 218px;
-    height: 16px;
-    background-size: 218px 16px;
-  }
-}
-
 .error {
   color: #ce1111;
 }
