@@ -1,25 +1,15 @@
 <template>
-  <li
-    :class="expanded ? 'expanded' : 'collapsed'"
-    @click="expanded = !expanded"
-  >
-    <span>{{ edit_date_formatted }}</span>
-    <template v-if="expanded">
-      <ContentEditChanges :edit_id="edit.id" />
-    </template>
-  </li>
+  <collapsible :label="edit_date_formatted">
+    <ContentEditChanges :edit_id="edit.id" />
+  </collapsible>
 </template>
 
 <script>
 import date from "date-and-time";
-import ContentEditChanges from "./ContentEditChanges";
+import ContentEditChanges from "./ContentEditChanges.vue";
+import Collapsible from "./Collapsible.vue";
 
 export default {
-  data() {
-    return {
-      expanded: false,
-    };
-  },
   props: {
     edit: Object,
   },
@@ -29,6 +19,7 @@ export default {
     },
   },
   components: {
+    Collapsible,
     ContentEditChanges,
   },
 };

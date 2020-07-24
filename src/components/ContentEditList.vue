@@ -1,57 +1,30 @@
 <template>
-  <div class="edits">
-    <span
-      :class="expanded ? 'expanded' : 'collapsed'"
-      @click="expanded = !expanded"
-    >Edits</span>
-    <ul v-if="expanded">
+  <collapsible class="edits" label="Edits">
+    <ul class="edit-list">
       <ContentEditListItem v-for="edit in edits" :key="edit.id" :edit="edit" />
     </ul>
-  </div>
+  </collapsible>
 </template>
 
 <script>
 import ContentEditListItem from "./ContentEditListItem";
+import Collapsible from "./Collapsible.vue";
 
 export default {
-  data() {
-    return {
-      expanded: false,
-    };
-  },
   props: {
     edits: Array,
   },
   components: {
     ContentEditListItem,
+    Collapsible,
   },
 };
 </script>
 
-<style lang="scss">
-div.edits {
-  > span {
-    cursor: pointer;
-  }
-  ul {
-    padding: 0;
-    margin: 0 0 0 0.5rem;
-    list-style: none;
-
-    li {
-      > span {
-        cursor: pointer;
-      }
-      > .content {
-        padding: 0 1rem;
-      }
-    }
-  }
-  .collapsed:before {
-    content: "▸ ";
-  }
-  .expanded:before {
-    content: "▾ ";
-  }
+<style lang="scss" scoped>
+ul.edit-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 </style>
