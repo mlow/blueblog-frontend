@@ -11,7 +11,9 @@
     </span>
 
     <div class="content">
-      <header class="logo">Blue Blog</header>
+      <header class="logo">
+        <router-link to="/">Blue Blog</router-link>
+      </header>
 
       <router-view />
     </div>
@@ -33,3 +35,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.logo a {
+  text-decoration: inherit;
+  color: inherit;
+}
+</style>
