@@ -47,6 +47,8 @@ export default {
       } else if (post_id) {
         // post not already cached, fetch it
         this.fetchByID({ id: post_id });
+      } else {
+        this.fetchLatest();
       }
     },
     current(post) {
