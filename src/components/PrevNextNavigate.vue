@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import date from "date-and-time";
+import { formatDate } from "@/util";
 
 export default {
   props: {
@@ -22,7 +22,7 @@ export default {
       };
     },
     publish_date_formatted() {
-      return date.format(this.post.publish_date, "MMMM D, YYYY");
+      return formatDate(this.post.publish_date, "MMMM D, YYYY");
     },
   },
 };

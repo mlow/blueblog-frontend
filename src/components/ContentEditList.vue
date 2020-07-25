@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import date from "date-and-time";
+import { formatDate } from "@/util";
 import Collapsible from "./Collapsible.vue";
 import ContentEditChanges from "./ContentEditChanges.vue";
 
@@ -20,12 +20,7 @@ export default {
     edits: Array,
   },
   methods: {
-    formatDate(to_format) {
-      return date.format(
-        to_format instanceof Date ? to_format : new Date(to_format),
-        "MMMM D, YYYY - h:mm A"
-      );
-    },
+    formatDate: (date) => formatDate(date, "MMMM D, YYYY - h:mm A"),
   },
   components: {
     Collapsible,

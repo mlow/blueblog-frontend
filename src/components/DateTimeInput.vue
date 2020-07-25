@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import date from "date-and-time";
+import { formatDate } from "@/util";
 
 export default {
   props: {
@@ -32,7 +32,7 @@ export default {
           return this.working;
         } else {
           return this.valid()
-            ? date.format(this.workingDate, this.format)
+            ? formatDate(this.workingDate, this.format)
             : "Invalid date";
         }
       },
@@ -51,12 +51,12 @@ export default {
     },
     reset() {
       this.workingDate = new Date();
-      this.working = date.format(this.workingDate, this.format);
+      this.working = formatDate(this.workingDate, this.format);
       this.$emit("input", this.workingDate);
     },
     validate() {
       if (this.valid()) {
-        this.working = date.format(this.workingDate, this.format);
+        this.working = formatDate(this.workingDate, this.format);
       } else if (!this.working) {
         this.reset();
       }

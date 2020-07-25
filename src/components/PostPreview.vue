@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import date from "date-and-time";
+import { formatDate } from "@/util";
 import Markdown from "./Markdown.vue";
 
 export default {
@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.publish_date ?? new Date(), "MMM D, YYYY");
+      return formatDate(this.publish_date ?? new Date(), "MMM D, YYYY");
     },
     draft_title() {
       return this.title || "Title";

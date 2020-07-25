@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import date from "date-and-time";
+import { formatDate } from "@/util";
 import Icon from "./Icon";
 import { DeletePost, GetPostEdits } from "../graphql/blog_post.gql";
 
@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     publish_date_formatted() {
-      return date.format(this.post.publish_date, "MMMM D, YYYY");
+      return formatDate(this.post.publish_date, "MMMM D, YYYY");
     },
     ownsPost() {
       return (
