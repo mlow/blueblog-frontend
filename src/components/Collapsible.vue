@@ -31,6 +31,7 @@ export default {
   }
   & > &-content {
     padding-left: 1rem;
+    padding-right: 1rem;
   }
   & > &-collapsed:before {
     content: "▸ ";

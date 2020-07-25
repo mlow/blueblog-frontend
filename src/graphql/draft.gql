@@ -26,3 +26,7 @@ mutation updateDraft($id: ID!, $input: UpdateDraftInput!) {
     ...draftDetails
   }
 }
+
+mutation deleteDraft($id: ID!) {
+  id: delete_draft(id: $id)
+}
