@@ -1,0 +1,28 @@
+fragment draftDetails on Draft {
+  id
+  title
+  content
+  date
+}
+
+query getDrafts {
+  drafts {
+    edges: afterEdges {
+      draft: node {
+        ...draftDetails
+      }
+    }
+  }
+}
+
+mutation createDraft($input: CreateDraftInput!) {
+  draft: create_draft(input: $input) {
+    ...draftDetails
+  }
+}
+
+mutation updateDraft($id: ID!, $input: UpdateDraftInput!) {
+  draft: update_draft(id: $id, input: $input) {
+    ...draftDetails
+  }
+}

@@ -27,18 +27,31 @@
       </span>
       <button type="button" @click="$emit('cancel')">Cancel</button>
     </div>
+    <DraftList
+      :draft="{ title: this.title, content: this.content }"
+      :selectFirstLoaded="loadFirstDraft"
+      @draft:selected="updateDraft"
+      v-on="$listeners"
+    />
   </form>
 </template>
 
 <script>
+import DraftList from "./DraftList.vue";
+
 export default {
   props: {
     title: String,
     content: String,
     error: String,
     submitLabel: String,
+    loadFirstDraft: Boolean,
   },
   methods: {
+    updateDraft(draft) {
+      this.$emit("update:title", draft.title);
+      this.$emit("update:content", draft.content);
+    },
     fitTextareaToContent(target) {
       target.style.height = "";
       target.style.height = target.scrollHeight + "px";
@@ -52,6 +65,9 @@ export default {
       // immediate so this gets fired upon creation as well
       immediate: true,
     },
+  },
+  components: {
+    DraftList,
   },
 };
 </script>

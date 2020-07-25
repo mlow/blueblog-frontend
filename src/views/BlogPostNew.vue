@@ -5,6 +5,7 @@
       :title.sync="draft.title"
       :content.sync="draft.content"
       :error="error"
+      :loadFirstDraft="true"
       @submit="submit"
       @cancel="cancel"
     >
@@ -96,8 +97,8 @@ export default {
   },
   components: {
     ContentForm,
-    PostPreview,
     DateTimeInput,
+    PostPreview,
   },
 };
 </script>
