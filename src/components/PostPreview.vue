@@ -7,14 +7,14 @@
       <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
     <div class="content">
-      <VueMarkdown :source="draft_content"></VueMarkdown>
+      <Markdown :source="draft_content"></Markdown>
     </div>
   </article>
 </template>
 
 <script>
 import date from "date-and-time";
-import VueMarkdown from "vue-markdown";
+import Markdown from "./Markdown.vue";
 
 export default {
   props: {
@@ -34,7 +34,7 @@ export default {
     },
   },
   components: {
-    VueMarkdown,
+    Markdown,
   },
 };
 </script>

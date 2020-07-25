@@ -17,7 +17,7 @@
       </div>
       <div class="publish_date">{{ publish_date_formatted }}</div>
     </header>
-    <div class="content" v-html="post.content" />
+    <div class="content rendered-markdown" v-html="post.content" />
     <ContentEditList v-if="ownsPost && edits.length > 0" :edits="edits" />
   </article>
 </template>
@@ -119,26 +119,9 @@ Are you sure?`)
     }
   }
 
-  > div.content {
+  > .content {
     //
     padding: 0 0.6875rem;
-
-    blockquote {
-      background: rgba(#777, 0.2);
-      border-left: 0.5rem solid #777;
-      color: #43484d;
-      margin: 1rem 0;
-      padding: 0 1rem;
-    }
-
-    pre {
-      background: rgba(#777, 0.2);
-      padding: 1rem;
-    }
-
-    code {
-      width: 100%;
-    }
   }
 }
 </style>
