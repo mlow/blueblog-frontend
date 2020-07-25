@@ -26,16 +26,16 @@ export default {
 
 <style lang="scss" scoped>
 .collapsible {
-  .collapsible &-label {
+  & > &-label {
     cursor: pointer;
   }
-  .collapsible &-content {
+  & > &-content {
     padding-left: 1rem;
   }
-  .collapsible &-collapsed:before {
+  & > &-collapsed:before {
     content: "▸ ";
   }
-  .collapsible &-expanded:before {
+  & > &-expanded:before {
     content: "▾ ";
   }
 }
