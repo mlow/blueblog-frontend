@@ -40,5 +40,6 @@ export default {
 .logo a {
   text-decoration: inherit;
   color: inherit;
+  outline: none;
 }
 </style>
