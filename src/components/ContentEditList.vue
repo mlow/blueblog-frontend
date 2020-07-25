@@ -1,22 +1,35 @@
 <template>
-  <collapsible class="edits" label="Edits">
+  <collapsible label="Edits">
     <ul class="edit-list">
-      <ContentEditListItem v-for="edit in edits" :key="edit.id" :edit="edit" />
+      <li v-for="edit in edits" :key="edit.id">
+        <collapsible :label="formatDate(edit.date)">
+          <ContentEditChanges :edit_id="edit.id" />
+        </collapsible>
+      </li>
     </ul>
   </collapsible>
 </template>
 
 <script>
-import ContentEditListItem from "./ContentEditListItem";
+import date from "date-and-time";
 import Collapsible from "./Collapsible.vue";
+import ContentEditChanges from "./ContentEditChanges.vue";
 
 export default {
   props: {
     edits: Array,
   },
+  methods: {
+    formatDate(to_format) {
+      return date.format(
+        to_format instanceof Date ? to_format : new Date(to_format),
+        "MMMM D, YYYY - h:mm A"
+      );
+    },
+  },
   components: {
-    ContentEditListItem,
     Collapsible,
+    ContentEditChanges,
   },
 };
 </script>
