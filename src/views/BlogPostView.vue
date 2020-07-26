@@ -78,7 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .post-navigator {
-  margin: 0 1rem 1rem 1rem;
+  margin: -1rem 1rem 1rem 1rem;
 
   &:after {
     content: "";
