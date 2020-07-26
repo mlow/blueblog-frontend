@@ -70,8 +70,8 @@ export default {
   },
   methods: {
     label(draft) {
-      const dateFormatted = formatDate(draft.date, "MMMM D, YYYY - h:mm A");
-      return `${dateFormatted}: ${draft.title}`;
+      const dateFormatted = formatDate(draft.date, "YYYY-MM-DD HH:mm");
+      return `${dateFormatted} ${draft.title ? " | " + draft.title : ""}`;
     },
     ...mapActions("draft", { selectDraft: "select" }),
     updateOrSaveDraft() {

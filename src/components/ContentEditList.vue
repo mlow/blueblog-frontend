@@ -20,7 +20,7 @@ export default {
     edits: Array,
   },
   methods: {
-    formatDate: (date) => formatDate(date, "MMMM D, YYYY - h:mm A"),
+    formatDate: (date) => formatDate(date, "YYYY-MM-DD HH:mm"),
   },
   components: {
     Collapsible,
