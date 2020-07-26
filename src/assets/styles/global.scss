@@ -42,19 +42,6 @@ button:active {
   margin: 0 auto;
   overflow: auto;
   position: relative;
-
-  .user-controls {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-
-    display: flex;
-    justify-content: right;
-
-    .icon {
-      margin-left: 0.5rem;
-    }
-  }
 }
 
 .paper {
@@ -63,8 +50,17 @@ button:active {
   border-radius: 1rem;
 }
 
-.content {
-  padding: 0 1rem;
+.user-controls {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+
+  display: flex;
+  justify-content: right;
+
+  .icon {
+    margin-left: 0.5rem;
+  }
 }
 
 .logo {

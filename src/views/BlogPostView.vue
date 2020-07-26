@@ -1,11 +1,13 @@
 <template>
   <div>
-    <Post v-if="!!current" :post="current" @deleted="postDeleted" />
-    <div v-else class="nothing-to-see">Check back later!</div>
-    <div class="post-navigator">
+    <main>
+      <Post v-if="!!current" :post="current" @deleted="postDeleted" />
+      <div v-else class="nothing-to-see">Check back later!</div>
+    </main>
+    <nav class="post-navigator">
       <prev-next-navigate v-if="!!previous" class="prev" :post="previous" />
       <prev-next-navigate v-if="!!next" class="next" :post="next" />
-    </div>
+    </nav>
   </div>
 </template>
 
@@ -76,9 +78,7 @@ export default {
 
 <style lang="scss" scoped>
 .post-navigator {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin: 0 1rem 1rem 1rem;
 
   &:after {
     content: "";

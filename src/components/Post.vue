@@ -98,7 +98,7 @@ Are you sure?`)
 
 <style lang="scss">
 .post {
-  margin: 2.5rem 1.5rem;
+  margin: 2.5rem 0;
 
   header {
     .title {

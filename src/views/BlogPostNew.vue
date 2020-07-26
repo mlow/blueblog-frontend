@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <ContentForm
       submitLabel="Publish"
       :title.sync="draft.title"
@@ -16,7 +16,7 @@
       </template>
     </ContentForm>
     <PostPreview v-bind="draft" />
-  </div>
+  </main>
 </template>
 
 <script>

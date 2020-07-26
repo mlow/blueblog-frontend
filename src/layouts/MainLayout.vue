@@ -10,7 +10,7 @@
       <Icon v-else icon="sign-in" route="/login" />
     </span>
 
-    <div class="content">
+    <div id="content">
       <header class="logo">
         <router-link to="/">Blue Blog</router-link>
       </header>
@@ -41,5 +41,9 @@ export default {
   text-decoration: inherit;
   color: inherit;
   outline: none;
+}
+
+#content >>> main {
+  padding: 0 2rem;
 }
 </style>
