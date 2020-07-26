@@ -1,5 +1,5 @@
 <template>
-  <VueMarkdown class="rendered-markdown" :source="source" />
+  <VueMarkdown class="rendered-markdown" :source="source" :breaks="false" />
 </template>
 
 <script>
