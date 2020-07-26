@@ -1,13 +1,13 @@
 <template>
-  <collapsible label="Edits">
+  <Collapsible label="Edits">
     <ul class="edit-list">
       <li v-for="edit in edits" :key="edit.id">
-        <collapsible :label="formatDate(edit.date)">
+        <Collapsible :label="formatDate(edit.date)">
           <ContentEditChanges :edit_id="edit.id" />
-        </collapsible>
+        </Collapsible>
       </li>
     </ul>
-  </collapsible>
+  </Collapsible>
 </template>
 
 <script>

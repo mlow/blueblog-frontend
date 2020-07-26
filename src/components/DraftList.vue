@@ -1,18 +1,18 @@
 <template>
-  <collapsible v-if="drafts.length" class="drafts" label="Drafts">
+  <Collapsible v-if="drafts.length" class="drafts" label="Drafts">
     <ul class="draft-list">
       <li v-for="draft in drafts" :key="draft.id">
-        <collapsible :label="label(draft)">
+        <Collapsible :label="label(draft)">
           <div class="draft-controls">
             <button type="button" @click="selectDraft(draft)">Edit</button>
             <button type="button" @click="deleteDraft(draft)">Delete</button>
           </div>
           <Markdown :source="draft.content" />
-        </collapsible>
+        </Collapsible>
       </li>
     </ul>
     <button type="button" @click="newDraft">New</button>
-  </collapsible>
+  </Collapsible>
 </template>
 
 <script>
