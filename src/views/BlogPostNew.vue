@@ -80,6 +80,7 @@ export default {
             name: "main",
             params: { id: post.id, slug: post.slug },
           });
+          this.$store.dispatch("draft/deleteSelected");
         })
         .catch((error) => (this.error = error.message));
     },

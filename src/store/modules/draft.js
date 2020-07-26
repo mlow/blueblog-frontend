@@ -59,6 +59,11 @@ export const actions = {
       },
     });
   },
+  deleteSelected({ state, dispatch }) {
+    if (state.selected.id) {
+      return dispatch("delete", state.selected);
+    }
+  },
   delete({ state, dispatch }, draft) {
     return apollo
       .mutate({
