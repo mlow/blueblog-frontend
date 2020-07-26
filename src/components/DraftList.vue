@@ -17,14 +17,10 @@
 
 <script>
 import { debounce } from "lodash-es";
+import { mapGetters, mapActions } from "vuex";
 import { formatDate } from "@/util";
 
-import {
-  getDrafts,
-  createDraft,
-  updateDraft,
-  deleteDraft,
-} from "../graphql/draft.gql";
+import { getDrafts } from "../graphql/draft.gql";
 
 import Collapsible from "./Collapsible.vue";
 import Markdown from "./Markdown.vue";
@@ -40,16 +36,23 @@ export default {
   data() {
     return {
       drafts: [],
-      selected: {
-        id: null,
-        date: null,
-        title: null,
-        content: null,
-      },
       debouncedUpdate: debounce(this.updateOrSaveDraft, 1500),
     };
   },
+  computed: {
+    ...mapGetters("draft", ["selected"]),
+  },
   watch: {
+    selected(selected) {
+      this.$emit("draft:selected", {
+        title: selected.title,
+        content: selected.content,
+      });
+
+      // when a new draft is selected, cancel any pending updates that may
+      // overwrite it.
+      this.debouncedUpdate.cancel();
+    },
     "draft.content"(newContent, oldContent) {
       if (!oldContent || !newContent) {
         // !oldContent: ignore the first update, to avoid saving a draft of
@@ -70,78 +73,24 @@ export default {
       const dateFormatted = formatDate(draft.date, "MMMM D, YYYY - h:mm A");
       return `${dateFormatted}: ${draft.title}`;
     },
-    selectDraft(draft) {
-      Object.assign(this.selected, draft);
-      this.$emit("draft:selected", draft);
-
-      this.debouncedUpdate.cancel(); // cancel any pending draft save
-    },
+    ...mapActions("draft", { selectDraft: "select" }),
     updateOrSaveDraft() {
-      (this.selected.id ? this.updateDraft() : this.saveDraft()).then(() => {
-        this.$emit("draft:saved");
-      });
-    },
-    saveDraft() {
-      console.log("Saving draft:", this.draft);
-      return this.$apollo
-        .mutate({
-          mutation: createDraft,
-          variables: {
-            input: this.draft,
-          },
-          update(store, { data: { draft } }) {
-            addDraftToStore(store, draft);
-          },
-        })
-        .then(({ data: { draft } }) => {
-          Object.assign(this.selected, draft);
-        });
-    },
-    updateDraft() {
-      console.log("Updating draft:", this.selected.id, this.draft);
-      return this.$apollo.mutate({
-        mutation: updateDraft,
-        variables: {
-          id: this.selected.id,
-          input: this.draft,
-        },
-        update(store, { data: { draft } }) {
-          addDraftToStore(store, draft);
-        },
-      });
+      this.$store
+        .dispatch("draft/updateOrSave", this.draft)
+        .then(() => this.$emit("draft:saved"));
     },
     deleteDraft(draft) {
       if (!confirmDraftDelete(draft)) {
         return;
       }
-      return this.$apollo
-        .mutate({
-          mutation: deleteDraft,
-          variables: { id: draft.id },
-          update(store, { data: { id } }) {
-            const data = store.readQuery({ query: getDrafts });
-            data.drafts.edges = data.drafts.edges.filter(
-              ({ draft: existing }) => existing.id !== id
-            );
-            store.writeQuery({ query: getDrafts, data });
-          },
-        })
-        .then(({ data: { id } }) => {
-          if (this.selected.id === id) {
-            this.selectDraft({
-              id: null,
-              date: null,
-              title: "",
-              content: "",
-            });
-          }
-        })
-        .catch((error) => {
-          window.alert(`Error deleting draft:\n${error.message}`);
-        });
+      this.$store
+        .dispatch("draft/delete", draft)
+        .catch((error) =>
+          window.alert(`Error deleting draft:\n${error.message}`)
+        );
     },
     newDraft() {
-      this.selectDraft({
+      this.$store.dispatch("draft/select", {
         id: null,
         date: null,
         title: "",
@@ -162,7 +111,7 @@ export default {
       }) {
         if (edges.length > 0 && this.selectFirstLoaded && !this.selected.id) {
           const [{ draft }] = edges;
-          this.selectDraft(draft);
+          this.$store.dispatch("draft/select", draft);
         }
       },
     },
@@ -183,22 +132,6 @@ Are you sure you want to delete the draft?
 Contents:
 
 ${draft.content}`);
-}
-
-function addDraftToStore(store, draft) {
-  const data = store.readQuery({ query: getDrafts });
-  const existingDraft = data.drafts.edges.find(
-    ({ draft: existing }) => existing.id === draft.id
-  );
-  if (existingDraft) {
-    Object.assign(existingDraft, draft);
-  } else {
-    data.drafts.edges.unshift({
-      __typename: "DraftEdge",
-      draft,
-    });
-  }
-  store.writeQuery({ query: getDrafts, data });
 }
 </script>
 
