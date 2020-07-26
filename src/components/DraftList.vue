@@ -43,11 +43,8 @@ export default {
     ...mapGetters("draft", ["selected"]),
   },
   watch: {
-    selected(selected) {
-      this.$emit("draft:selected", {
-        title: selected.title,
-        content: selected.content,
-      });
+    selected() {
+      this.emitSelection();
 
       // when a new draft is selected, cancel any pending updates that may
       // overwrite it.
@@ -69,11 +66,17 @@ export default {
     },
   },
   methods: {
+    ...mapActions("draft", { selectDraft: "select" }),
     label(draft) {
       const dateFormatted = formatDate(draft.date, "YYYY-MM-DD HH:mm");
       return `${dateFormatted} ${draft.title ? " | " + draft.title : ""}`;
     },
-    ...mapActions("draft", { selectDraft: "select" }),
+    emitSelection() {
+      this.$emit("draft:selected", {
+        title: this.selected.title,
+        content: this.selected.content,
+      });
+    },
     updateOrSaveDraft() {
       this.$store
         .dispatch("draft/updateOrSave", this.draft)
@@ -97,6 +100,11 @@ export default {
         content: "",
       });
     },
+  },
+  created() {
+    if (this.selected.id) {
+      this.emitSelection();
+    }
   },
   apollo: {
     drafts: {
