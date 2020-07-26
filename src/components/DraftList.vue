@@ -102,7 +102,12 @@ export default {
     drafts: {
       query: getDrafts,
       update({ drafts: { edges } }) {
-        return edges.map(({ draft }) => draft);
+        return edges
+          .map(({ draft }) => ({
+            ...draft,
+            date: new Date(draft.date),
+          }))
+          .sort((a, b) => b.date.getTime() - a.date.getTime());
       },
       result({
         data: {
