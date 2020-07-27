@@ -4,9 +4,9 @@
       <Post v-if="!!current" :post="current" @deleted="postDeleted" />
       <div v-else class="nothing-to-see">Check back later!</div>
     </main>
-    <nav class="post-navigator">
-      <prev-next-navigate v-if="!!previous" class="prev" :post="previous" />
-      <prev-next-navigate v-if="!!next" class="next" :post="next" />
+    <nav class="post-navigator" v-show="previous || next">
+      <prev-next-navigate v-if="previous" class="prev" :post="previous" />
+      <prev-next-navigate v-if="next" class="next" :post="next" />
     </nav>
   </div>
 </template>
