@@ -6,6 +6,7 @@
 }
 
 body {
+  margin: 0;
   padding: 1rem;
   @media (min-width: 400px) {
     padding: 1rem;
@@ -13,9 +14,6 @@ body {
   @media (min-width: 800px) {
     padding: 2rem;
   }
-  margin: 0;
-  height: 100%;
-  width: 100%;
   font-family: "GL Erekles Stamba";
   background: url("~@/assets/images/background.jpg") repeat fixed;
 }
