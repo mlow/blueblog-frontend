@@ -16,23 +16,25 @@ fragment editList on BlogPost {
 }
 
 query GetPost($id: ID!) {
-  blog_post(id: $id) {
+  blog_post: node(id: $id) {
     ...postDetail
   }
 }
 
 query GetPostEdits($id: ID!) {
-  blog_post(id: $id) {
+  blog_post: node(id: $id) {
     ...editList
   }
 }
 
 query GetPostForEdit($id: ID!) {
-  blog_post(id: $id) {
-    title
-    content(format: MARKDOWN)
-    publish_date
-    slug
+  blog_post: node(id: $id) {
+    ... on BlogPost {
+      title
+      content(format: MARKDOWN)
+      publish_date
+      slug
+    }
   }
 }
 
