@@ -15,7 +15,7 @@
       <br />
       <input
         type="text"
-        id="name"
+        id="username"
         :placeholder="userData.author.username"
         v-model="input.username"
       />
