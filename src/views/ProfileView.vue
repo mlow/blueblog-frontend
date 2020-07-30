@@ -7,7 +7,7 @@
         type="password"
         id="password"
         placeholder="Enter your current password"
-        v-model="input.password"
+        v-model="form.password"
       />
     </div>
     <div class="form-group">
@@ -17,7 +17,7 @@
         type="text"
         id="username"
         :placeholder="userData.author.username"
-        v-model="input.username"
+        v-model="form.username"
       />
     </div>
     <div class="form-group">
@@ -27,13 +27,13 @@
         type="text"
         id="name"
         :placeholder="userData.author.name"
-        v-model="input.name"
+        v-model="form.name"
       />
     </div>
     <div class="form-group" style="margin-top: 1.5rem">
       <label for="new-password">New Password</label>
       <br />
-      <input type="password" id="new-password" v-model="input.new_password" />
+      <input type="password" id="new-password" v-model="form.new_password" />
     </div>
     <div class="form-group">
       <label for="new-password-repeat">New Password Repeated</label>
@@ -41,7 +41,7 @@
       <input
         type="password"
         id="new-password-repeat"
-        v-model="new_password_repeat"
+        v-model="form.new_password_repeat"
       />
     </div>
     <div style="margin-top: 1rem;" class="form-group flex flex-between">
@@ -58,13 +58,13 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      input: {
+      form: {
         name: "",
         username: "",
         password: "",
         new_password: "",
+        new_password_repeat: "",
       },
-      new_password_repeat: "",
       error: "",
     };
   },
@@ -73,34 +73,32 @@ export default {
   },
   methods: {
     clear() {
-      this.input = {
+      this.form = {
         name: "",
         username: "",
         password: "",
         new_password: "",
+        new_password_repeat: "",
       };
-      this.new_password_repeat = "";
       this.error = "";
     },
     submit() {
-      if (!this.input.password) {
+      if (!this.form.password) {
         this.error = "Current password required.";
         return;
       }
-      if (this.input.new_password !== this.new_password_repeat) {
+      if (this.form.new_password !== this.form.new_password_repeat) {
         this.error = "New passwords don't match.";
         return;
       }
 
-      if (
-        !(this.input.new_password || this.input.name || this.input.username)
-      ) {
+      if (!(this.form.new_password || this.form.name || this.form.username)) {
         this.error = "No changes to save.";
         return;
       }
 
       this.$store
-        .dispatch("updateProfile", this.input)
+        .dispatch("updateProfile", this.form)
         .then(() => {
           this.clear();
           alert("Success!");
