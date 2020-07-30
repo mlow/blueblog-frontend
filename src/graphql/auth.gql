@@ -1,3 +1,9 @@
 mutation authenticate($username: String!, $password: String!) {
   authenticate(username: $username, password: $password)
 }
+
+mutation updateAuthor($input: UpdateAuthorInput!) {
+  update_author(input: $input) {
+    name
+  }
+}

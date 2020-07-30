@@ -1,5 +1,0 @@
-mutation updateAuthor($input: UpdateAuthorInput!) {
-  update_author(input: $input) {
-    name
-  }
-}

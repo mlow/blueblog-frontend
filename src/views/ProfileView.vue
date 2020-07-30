@@ -54,7 +54,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { updateAuthor } from "../graphql/author.gql";
 
 export default {
   data() {
@@ -100,18 +99,8 @@ export default {
         return;
       }
 
-      this.$apollo
-        .mutate({
-          mutation: updateAuthor,
-          variables: {
-            input: {
-              password: this.input.password,
-              name: this.input.name || null,
-              username: this.input.username || null,
-              new_password: this.input.new_password || null,
-            },
-          },
-        })
+      this.$store
+        .dispatch("updateProfile", this.input)
         .then(() => {
           this.clear();
           alert("Success!");
