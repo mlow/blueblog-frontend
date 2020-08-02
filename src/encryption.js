@@ -60,7 +60,7 @@ export async function encrypt(plaintext, key) {
   const iv = getRandomBytes(12);
   return {
     encryption_params: {
-      cipher: "AES-256-GCM",
+      cipher: "AES_256_GCM",
       iv: base64Encode(iv),
     },
     ciphertext: base64Encode(
@@ -69,10 +69,11 @@ export async function encrypt(plaintext, key) {
   };
 }
 
+const decoder = new TextDecoder();
 export function decrypt({ encryption_params, ciphertext }, key) {
   return _decrypt(
     key,
     base64Decode(encryption_params.iv),
     base64Decode(ciphertext)
-  );
+  ).then((plaintext) => decoder.decode(plaintext));
 }
