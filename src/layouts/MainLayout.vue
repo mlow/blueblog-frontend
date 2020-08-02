@@ -2,12 +2,16 @@
   <div class="paper container">
     <span class="user-controls">
       <template v-if="loggedIn">
-        <Icon icon="feather" v-show="!authoring" :route="{ name: 'blog:new' }" />
+        <Icon
+          icon="feather"
+          v-show="!authoring"
+          :route="{ name: 'blog:new' }"
+        />
         <Icon icon="book" />
         <Icon icon="user-profile" route="/profile" />
         <Icon icon="sign-out" route="/logout" />
       </template>
-      <Icon v-else icon="sign-in" route="/login" />
+      <Icon v-else icon="sign-in" :route="loginRoute" />
     </span>
 
     <div id="content">
@@ -27,6 +31,14 @@ import { mapGetters } from "vuex";
 export default {
   name: "MainLayout",
   computed: {
+    loginRoute() {
+      return {
+        name: "login",
+        query: {
+          redirect: this.$route.fullPath,
+        },
+      };
+    },
     ...mapGetters(["loggedIn"]),
     ...mapGetters("ui", ["authoring"]),
   },

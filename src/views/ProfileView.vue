@@ -91,7 +91,6 @@ export default {
         this.error = "New passwords don't match.";
         return;
       }
-
       if (!(this.form.new_password || this.form.name || this.form.username)) {
         this.error = "No changes to save.";
         return;

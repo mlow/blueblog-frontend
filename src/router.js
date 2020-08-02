@@ -37,8 +37,9 @@ const router = new Router({
     {
       path: "/logout",
       name: "logout",
-      beforeEnter() {
+      beforeEnter(to, from, next) {
         store.dispatch("logout");
+        next(from.meta && from.meta.auth ? { name: "main" } : from);
       },
     },
     {
@@ -48,11 +49,13 @@ const router = new Router({
         {
           path: "new",
           name: "blog:new",
+          meta: { auth: true },
           component: () => import("./views/BlogPostNew.vue"),
         },
         {
           path: ":id/edit",
           name: "blog:edit",
+          meta: { auth: true },
           component: () => import("./views/BlogPostEdit.vue"),
         },
       ],
@@ -79,11 +82,26 @@ Router.prototype.goBackOrMain = function() {
   }
 };
 
-router.beforeEach((to, from, next) => {
-  if (store.getters.loggedIn && to.name == "login") {
-    next({ name: "main" });
+Router.prototype.redirectOrMain = function() {
+  if (this.currentRoute.query.redirect) {
+    this.push({ path: this.currentRoute.query.redirect });
+  } else {
+    this.push({ name: "main" });
   }
-  next();
+};
+
+router.beforeEach((to, from, next) => {
+  if (store.getters.loggedIn) {
+    if (to.name === "login" && !to.query.forced) {
+      next({ name: "main" });
+    } else {
+      next();
+    }
+  } else if (to.meta.auth) {
+    next({ name: "login", query: { redirect: to.path } });
+  } else {
+    next();
+  }
 });
 
 export default router;

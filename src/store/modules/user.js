@@ -20,7 +20,7 @@ async function getHashedPassword(password) {
 }
 
 async function generateOrRewrapMasterKey({ userData }, password, new_password) {
-  if (!password || !userData.author.wrapped_key) {
+  if (!userData.author.wrapped_key) {
     return generateMasterKey(new_password);
   } else {
     try {
@@ -33,7 +33,6 @@ async function generateOrRewrapMasterKey({ userData }, password, new_password) {
         )
       );
     } catch (error) {
-      console.error(error);
       // this likely means we were unable to unwrap the existing key due to an
       // incorrect password. Emit the same password incorrect message as the
       // server does.
@@ -45,6 +44,7 @@ async function generateOrRewrapMasterKey({ userData }, password, new_password) {
 export const state = () => ({
   jwt: null,
   userData: null,
+  masterKey: null,
 });
 
 export const getters = {
@@ -53,28 +53,37 @@ export const getters = {
   },
   jwt: (state) => state.jwt,
   userData: (state) => state.userData,
+  masterKey: (state) => state.masterKey,
 };
 
 export const mutations = {
-  UPDATE_AUTH_DATA(state, jwt) {
+  SET_USER_DATA(state, { jwt, userData }) {
     state.jwt = jwt;
-    state.userData = JwtDecode(jwt);
+    state.userData = userData;
+  },
+  SET_MASTER_KEY(state, masterKey) {
+    state.masterKey = masterKey;
   },
   CLEAR_AUTH_DATA(state) {
     state.jwt = null;
     state.userData = null;
-    Cookies.remove("jwt.header.payload");
+    state.masterKey = null;
   },
 };
 
 export const actions = {
-  updateToken({ commit }, jwt) {
-    commit("UPDATE_AUTH_DATA", jwt);
+  initAuth({ commit }, jwt) {
+    const _jwt = jwt || Cookies.get("jwt.header.payload");
+    if (_jwt) {
+      commit("SET_USER_DATA", { jwt: _jwt, userData: JwtDecode(_jwt) });
+    }
   },
-  initAuth({ dispatch }) {
-    let jwtPayload = Cookies.get("jwt.header.payload");
-    if (jwtPayload) {
-      dispatch("updateToken", jwtPayload);
+  unlockMasterKey({ state, commit }, password) {
+    const { wrapped_key, key_salt } = state.userData.author;
+    if (wrapped_key && key_salt) {
+      return unwrapMasterKey(password, key_salt, wrapped_key).then((key) =>
+        commit("SET_MASTER_KEY", key)
+      );
     }
   },
   async login({ dispatch }, { username, password }) {
@@ -86,11 +95,12 @@ export const actions = {
           password: await getHashedPassword(password),
         },
       })
-      .then(() => {
-        dispatch("updateToken", Cookies.get("jwt.header.payload"));
-      });
+      .then(() => dispatch("unlockMasterKey", password));
   },
-  async updateProfile({ state }, { password, name, username, new_password }) {
+  async updateProfile(
+    { state, dispatch },
+    { password, name, username, new_password }
+  ) {
     const input = {
       password: await getHashedPassword(password),
       name: name || null,
@@ -102,14 +112,17 @@ export const actions = {
         ...(await generateOrRewrapMasterKey(state, password, new_password)),
       });
     }
-    return apollo.mutate({
-      mutation: updateAuthor,
-      variables: {
-        input,
-      },
-    });
+    return apollo
+      .mutate({
+        mutation: updateAuthor,
+        variables: {
+          input,
+        },
+      })
+      .then(() => dispatch("unlockMasterKey", new_password));
   },
   logout({ commit }) {
     commit("CLEAR_AUTH_DATA");
+    Cookies.remove("jwt.header.payload");
   },
 };

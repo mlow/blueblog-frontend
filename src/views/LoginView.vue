@@ -39,7 +39,7 @@ export default {
       this.$store
         .dispatch("login", this.form)
         .then(() => {
-          this.$router.push({ name: "main" });
+          this.$router.redirectOrMain();
         })
         .catch((error) => {
           if (Object.prototype.hasOwnProperty.call(error, "graphQLErrors")) {

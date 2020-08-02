@@ -26,13 +26,11 @@ const httpLink = createHttpLink({
 
 const tokenUpdateLink = new ApolloLink((operation, forward) => {
   return forward(operation).map((data) => {
-    const token = store.getters.jwt;
-    if (token) {
-      const cookie = Cookies.get("jwt.header.payload");
-      if (cookie && cookie !== token) {
-        // received new token in last response, update store with it
-        store.dispatch("updateToken", cookie);
-      }
+    const existingToken = store.getters.jwt;
+    const currentToken = Cookies.get("jwt.header.payload");
+    if (currentToken && existingToken !== currentToken) {
+      // received new token in last response, update store with it
+      store.dispatch("initAuth", currentToken);
     }
     return data;
   });
