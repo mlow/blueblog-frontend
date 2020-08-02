@@ -1,23 +1,3 @@
-import { encode, decode } from "base64-arraybuffer";
-
-/**
- * @param {string} base64 the base64 encoded string of data to decode.
- *
- * @returns {Uint8Array} the decoded bytes.
- */
-export function base64Decode(base64) {
-  return new Uint8Array(decode(base64));
-}
-
-/**
- * @param {BufferSource} data
- *
- * @returns {string} base64 encoded string of `data`.
- */
-export function base64Encode(data) {
-  return encode(data);
-}
-
 /**
  * @param {number} length the number bytes to return.
  *

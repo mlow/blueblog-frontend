@@ -1,6 +1,5 @@
+import { base64Encode, base64Decode } from "./util";
 import {
-  base64Encode,
-  base64Decode,
   getRandomBytes,
   generateKey,
   deriveKey,

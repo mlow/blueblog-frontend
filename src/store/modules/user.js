@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import JwtDecode from "jwt-decode";
 import { apollo } from "@/apollo";
 import { authenticate, updateAuthor } from "@/graphql/auth.gql";
-import { base64Encode } from "@/webcrypto";
+import { base64Encode } from "@/util";
 import {
   generateMasterKey,
   wrapMasterKey,
