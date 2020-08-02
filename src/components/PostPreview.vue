@@ -4,11 +4,9 @@
       <div>
         <h2 class="title">{{ draft_title }}</h2>
       </div>
-      <div class="publish_date">{{ publish_date_formatted }}</div>
+      <div class="date">{{ publish_date_formatted }}</div>
     </header>
-    <div class="content">
-      <Markdown :source="draft_content"></Markdown>
-    </div>
+    <Markdown class="content" :source="draft_content"></Markdown>
   </article>
 </template>
 

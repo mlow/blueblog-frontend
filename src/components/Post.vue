@@ -15,7 +15,7 @@
           <Icon icon="delete" @click="this.delete" />
         </span>
       </div>
-      <div class="publish_date">{{ publish_date_formatted }}</div>
+      <div class="date">{{ publish_date_formatted }}</div>
     </header>
     <div class="content rendered-markdown" v-html="post.content" />
     <ContentEditList v-if="ownsPost && edits.length > 0" :edits="edits" />
@@ -113,7 +113,7 @@ Are you sure?`)
       margin-left: 0.5rem;
     }
 
-    .publish_date {
+    .date {
       font-size: 0.9rem;
       font-style: italic;
     }
