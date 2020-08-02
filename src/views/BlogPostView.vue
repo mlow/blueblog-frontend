@@ -1,10 +1,24 @@
 <template>
   <div>
     <main>
-      <Post v-if="!!current" :post="current" @deleted="postDeleted" />
+      <div v-if="current">
+        <Post v-bind="{ ...current, date: current.publish_date }">
+          <template v-if="ownsPost" v-slot:controls>
+            <Icon
+              icon="edit"
+              :route="{ name: 'blog:edit', params: { id: current.id } }"
+            />
+            <Icon icon="delete" @click="deletePost" />
+          </template>
+        </Post>
+        <ContentEditList
+          v-if="ownsPost && edits && edits.length > 0"
+          :edits="edits"
+        />
+      </div>
       <div v-else class="nothing-to-see">Check back later!</div>
     </main>
-    <nav class="post-navigator" v-show="previous || next">
+    <nav v-if="current" class="post-navigator">
       <prev-next-navigate v-if="previous" class="prev" :post="previous" />
       <prev-next-navigate v-if="next" class="next" :post="next" />
     </nav>
@@ -12,14 +26,24 @@
 </template>
 
 <script>
+import Icon from "../components/Icon.vue";
 import Post from "../components/Post.vue";
 import PrevNextNavigate from "../components/PrevNextNavigate.vue";
 import { mapGetters, mapActions } from "vuex";
+import { DeletePost, GetPostEdits } from "../graphql/blog_post.gql";
 
 export default {
   name: "BlogPostView",
   computed: {
+    ...mapGetters(["loggedIn", "userData"]),
     ...mapGetters("blog_post", ["current", "previous", "next"]),
+    ownsPost() {
+      return (
+        this.current &&
+        this.loggedIn &&
+        this.userData.sub == this.current.author_id
+      );
+    },
   },
   methods: {
     ...mapActions("blog_post", [
@@ -29,15 +53,35 @@ export default {
       "fetchByID",
       "fetchLatest",
     ]),
-    async postDeleted() {
-      await this.delete();
-      if (this.current && this.$route.params.id) {
-        this.$router.push({
-          name: "main",
-          params: { id: this.current.id, slug: this.current.slug },
-        });
+    deletePost() {
+      if (
+        !window.confirm(`\
+You are about to delete the post:
+
+    ${this.current.title}
+
+Are you sure?`)
+      ) {
+        return;
       }
-      alert("Post deleted!");
+      this.$apollo
+        .mutate({
+          mutation: DeletePost,
+          variables: {
+            id: this.current.id,
+          },
+        })
+        .then(() => this.delete())
+        .then(() => {
+          if (this.current && this.$route.params.id) {
+            this.$router.push({
+              name: "main",
+              params: { id: this.current.id, slug: this.current.slug },
+            });
+          }
+          alert("Post deleted!");
+        })
+        .catch((error) => alert(error));
     },
   },
   watch: {
@@ -69,8 +113,24 @@ export default {
       this.fetchLatest();
     }
   },
+  apollo: {
+    edits: {
+      query: GetPostEdits,
+      variables() {
+        return {
+          id: this.current.id,
+        };
+      },
+      skip() {
+        return !this.ownsPost;
+      },
+      update: ({ blog_post: { edits } }) => edits,
+    },
+  },
   components: {
+    Icon,
     Post,
+    ContentEditList: () => import("../components/ContentEditList.vue"),
     PrevNextNavigate,
   },
 };
@@ -78,7 +138,8 @@ export default {
 
 <style lang="scss" scoped>
 .post-navigator {
-  margin: -1rem 1rem 1rem 1rem;
+  margin: 1rem;
+  overflow: auto;
 
   &:after {
     content: "";

@@ -6,99 +6,54 @@
   >
     <header>
       <div>
-        <h2 class="title">{{ post.title }}</h2>
-        <span v-if="ownsPost" v-show="hovered" class="post-controls">
-          <Icon
-            icon="edit"
-            :route="{ name: 'blog:edit', params: { id: post.id } }"
-          />
-          <Icon icon="delete" @click="this.delete" />
+        <h2 class="title">{{ title }}</h2>
+        <span v-show="hovered" class="content-controls">
+          <slot name="controls"></slot>
         </span>
       </div>
-      <div class="date">{{ publish_date_formatted }}</div>
+      <div class="date">{{ date_formatted }}</div>
     </header>
-    <div class="content rendered-markdown" v-html="post.content" />
-    <ContentEditList v-if="ownsPost && edits.length > 0" :edits="edits" />
+    <Markdown v-if="render" :source="content" />
+    <div v-else class="content rendered-markdown" v-html="content" />
   </article>
 </template>
 
 <script>
 import { formatDate } from "@/util";
-import Icon from "./Icon";
-import { DeletePost, GetPostEdits } from "../graphql/blog_post.gql";
 
 export default {
+  props: {
+    date: String,
+    dateFormat: {
+      type: String,
+      default: "MMMM D, YYYY",
+    },
+    title: String,
+    content: String,
+    render: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       hovered: false,
-      edits: [],
     };
   },
-  props: {
-    post: {
-      type: Object,
-    },
-  },
   computed: {
-    publish_date_formatted() {
-      return formatDate(this.post.publish_date, "MMMM D, YYYY");
-    },
-    ownsPost() {
-      return (
-        this.$store.getters.loggedIn &&
-        this.$store.getters.userData.sub == this.post.author_id
-      );
-    },
-  },
-  methods: {
-    delete() {
-      if (
-        !window.confirm(`\
-You are about to delete the post:
-
-    ${this.post.title}
-
-Are you sure?`)
-      ) {
-        return;
-      }
-      this.$apollo
-        .mutate({
-          mutation: DeletePost,
-          variables: {
-            id: this.post.id,
-          },
-        })
-        .then(() => {
-          this.$emit("deleted");
-        })
-        .catch((error) => alert(error));
-    },
-  },
-  apollo: {
-    edits: {
-      query: GetPostEdits,
-      variables() {
-        return {
-          id: this.post.id,
-        };
-      },
-      skip() {
-        return !this.ownsPost;
-      },
-      update: ({ blog_post: { edits } }) => edits,
+    date_formatted() {
+      return formatDate(this.date, this.dateFormat);
     },
   },
   components: {
-    Icon,
-    ContentEditList: () => import("../components/ContentEditList"),
+    Markdown: () => import("./Markdown.vue"),
   },
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .post {
-  margin: 2rem 0;
+  margin-top: 2rem;
 
   header {
     .title {
@@ -109,7 +64,7 @@ Are you sure?`)
       font-weight: bold;
     }
 
-    .post-controls > * {
+    .content-controls > * {
       margin-left: 0.5rem;
     }
 
@@ -120,7 +75,6 @@ Are you sure?`)
   }
 
   > .content {
-    //
     padding: 0 0.6875rem;
   }
 }
