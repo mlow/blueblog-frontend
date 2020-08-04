@@ -23,7 +23,7 @@ import { formatDate } from "@/util";
 
 export default {
   props: {
-    date: String,
+    date: [Date, String],
     dateFormat: {
       type: String,
       default: "MMMM D, YYYY",
