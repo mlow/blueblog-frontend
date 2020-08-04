@@ -23,49 +23,23 @@
     <div class="form-group flex flex-between">
       <span>
         <button type="submit">{{ submitLabel }}</button>
+        <slot name="controls"></slot>
         <span v-if="!!error" class="error">{{ error }}</span>
-        <span
-          :style="{
-            'margin-left': '1rem',
-            transition: 'opacity 1000ms ease',
-            opacity: this.showDraftSaved ? 1 : 0,
-          }"
-          @transitionend="showDraftSaved = false"
-        >Draft saved</span>
       </span>
       <button type="button" @click="$emit('cancel')">Cancel</button>
     </div>
-    <DraftList
-      :draft="{ title, content }"
-      :selectFirstLoaded="loadFirstDraft"
-      @draft:selected="updateDraft"
-      @draft:saved="showDraftSaved = true"
-      v-on="$listeners"
-    />
   </form>
 </template>
 
 <script>
-import DraftList from "./DraftList.vue";
-
 export default {
   props: {
     title: String,
     content: String,
     error: String,
     submitLabel: String,
-    loadFirstDraft: Boolean,
-  },
-  data() {
-    return {
-      showDraftSaved: false,
-    };
   },
   methods: {
-    updateDraft(draft) {
-      this.$emit("update:title", draft.title);
-      this.$emit("update:content", draft.content);
-    },
     fitTextareaToContent(target) {
       target.style.height = "";
       target.style.height = target.scrollHeight + "px";
@@ -80,15 +54,9 @@ export default {
       immediate: true,
     },
   },
-  components: {
-    DraftList,
-  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "@/assets/styles/form.scss";
-.drafts {
-  margin-top: 1rem;
-}
 </style>

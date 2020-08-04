@@ -13,15 +13,29 @@
           <DateTimeInput style="width:180px" v-model="draft.publish_date" />
         </div>
       </template>
+      <template v-slot:controls>
+        <FlashIn style="margin-left: 0.5rem" :display.sync="showDraftSaved">
+          Draft saved
+        </FlashIn>
+      </template>
     </ContentForm>
+    <BlogDrafts
+      ref="drafts"
+      :title.sync="draft.title"
+      :content.sync="draft.content"
+      @draft:saved="showDraftSaved = true"
+    />
     <PostPreview v-bind="draft" />
   </main>
 </template>
 
 <script>
 import PostPreview from "../components/PostPreview";
+import BlogDrafts from "../components/BlogDrafts";
+import FlashIn from "../components/FlashIn";
 import DateTimeInput from "../components/DateTimeInput";
 import ContentForm from "../components/ContentForm";
+
 import {
   GetPostForEdit,
   GetPostEdits,
@@ -39,6 +53,7 @@ export default {
         publish_date: null,
       },
       error: undefined,
+      showDraftSaved: false,
     };
   },
   computed: {
@@ -116,7 +131,7 @@ export default {
             name: "main",
             params: { id: post.id, slug: post.slug },
           });
-          this.$store.dispatch("draft/deleteSelected");
+          this.$refs.drafts.deleteSelected();
         })
         .catch((error) => alert(error));
     },
@@ -148,8 +163,10 @@ export default {
   },
   components: {
     ContentForm,
+    BlogDrafts,
     DateTimeInput,
     PostPreview,
+    FlashIn,
   },
 };
 </script>

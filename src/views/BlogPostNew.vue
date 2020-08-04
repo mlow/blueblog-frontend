@@ -14,13 +14,27 @@
           <DateTimeInput style="width:180px" v-model="draft.publish_date" />
         </div>
       </template>
+      <template v-slot:controls>
+        <FlashIn style="margin-left: 0.5rem" :display.sync="showDraftSaved">
+          Draft saved
+        </FlashIn>
+      </template>
     </ContentForm>
+    <BlogDrafts
+      ref="drafts"
+      :title.sync="draft.title"
+      :content.sync="draft.content"
+      :selectFirstLoaded="true"
+      @draft:saved="showDraftSaved = true"
+    />
     <PostPreview v-bind="draft" />
   </main>
 </template>
 
 <script>
 import ContentForm from "../components/ContentForm.vue";
+import BlogDrafts from "../components/BlogDrafts.vue";
+import FlashIn from "../components/FlashIn.vue";
 import PostPreview from "../components/PostPreview.vue";
 import DateTimeInput from "../components/DateTimeInput.vue";
 
@@ -36,6 +50,7 @@ export default {
         publish_date: new Date(),
       },
       error: undefined,
+      showDraftSaved: false,
     };
   },
   methods: {
@@ -80,7 +95,7 @@ export default {
             name: "main",
             params: { id: post.id, slug: post.slug },
           });
-          this.$store.dispatch("draft/deleteSelected");
+          this.$refs.drafts.deleteSelected();
         })
         .catch((error) => (this.error = error.message));
     },
@@ -98,8 +113,10 @@ export default {
   },
   components: {
     ContentForm,
+    BlogDrafts,
     DateTimeInput,
     PostPreview,
+    FlashIn,
   },
 };
 </script>
