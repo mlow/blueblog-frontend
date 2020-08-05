@@ -114,7 +114,7 @@ function addDraftToStore(store, draft) {
     ({ draft: existing }) => existing.id === draft.id
   );
   if (existingDraft) {
-    Object.assign(existingDraft, draft);
+    Object.assign(existingDraft.draft, draft);
   } else {
     data.drafts.edges.unshift({
       __typename: "DraftEdge",
