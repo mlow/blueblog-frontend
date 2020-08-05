@@ -1,15 +1,5 @@
 <template>
   <form class="form-control" @submit.prevent="submit">
-    <div class="form-group" style="margin-bottom: 1.5rem;">
-      <label for="password">Current Password</label>
-      <br />
-      <input
-        type="password"
-        id="password"
-        placeholder="Enter your current password"
-        v-model="form.password"
-      />
-    </div>
     <div class="form-group">
       <label for="name">Username</label>
       <br />
@@ -35,13 +25,24 @@
       <br />
       <input type="password" id="new-password" v-model="form.new_password" />
     </div>
-    <div class="form-group">
+    <div class="form-group" style="margin-bottom: .75rem;">
       <label for="new-password-repeat">New Password Repeated</label>
       <br />
       <input
         type="password"
         id="new-password-repeat"
         v-model="form.new_password_repeat"
+      />
+    </div>
+    <hr />
+    <div class="form-group" style="margin-top: .75rem;">
+      <label for="password">Current Password</label>
+      <br />
+      <input
+        type="password"
+        id="password"
+        placeholder="Enter your current password"
+        v-model="form.password"
       />
     </div>
     <div style="margin-top: 1rem;" class="form-group flex flex-between">
