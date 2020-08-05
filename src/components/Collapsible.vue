@@ -4,7 +4,9 @@
       class="collapsible-label"
       :class="'collapsible-' + (expanded ? 'expanded' : 'collapsed')"
       @click="expanded = !expanded"
-    >{{ label }}</span>
+    >
+      {{ label }}
+    </span>
     <div v-if="expanded" class="collapsible-content">
       <slot></slot>
     </div>
