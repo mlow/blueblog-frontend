@@ -131,6 +131,7 @@ export default {
             name: "main",
             params: { id: post.id, slug: post.slug },
           });
+          this.$refs.drafts.cancelUpdate();
           this.$refs.drafts.deleteSelected();
         })
         .catch((error) => alert(error));

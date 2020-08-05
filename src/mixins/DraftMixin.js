@@ -13,7 +13,6 @@ export default {
         title: "",
         content: "",
       },
-      justSaved: false,
       debouncedUpdate: debounce(this._updateOrSave, 1500),
     };
   },
@@ -36,13 +35,15 @@ export default {
   methods: {
     _updateOrSave() {
       (this.selected.id ? this.update : this.save)().then(() => {
-        this.justSaved = true;
         this.$emit("draft:saved");
       });
     },
+    cancelUpdate() {
+      this.debouncedUpdate.cancel();
+    },
     select(draft) {
       this.selected = Object.assign({}, this.selected, draft);
-      this.debouncedUpdate.cancel();
+      this.cancelUpdate();
 
       this.$emit("update:title", this.selected.title);
       this.$emit("update:content", this.selected.content);
@@ -56,7 +57,9 @@ export default {
       });
     },
     deleteSelected() {
-      return this.delete(this.selected);
+      if (this.selected.id) {
+        this.delete(this.selected);
+      }
     },
     confirmDelete(draft) {
       if (
