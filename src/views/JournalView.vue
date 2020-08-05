@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="encryption-not-configured">
+    <div v-else class="banner">
       Head to
       <router-link to="/profile">your profile</router-link>
       and update your password in order to use the journal.
@@ -78,12 +78,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.encryption-not-configured {
-  margin: 2em 0;
-  text-align: center;
-  font-size: 1.5em;
-  line-height: 1em;
-}
-</style>

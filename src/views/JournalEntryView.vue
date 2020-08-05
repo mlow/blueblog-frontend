@@ -11,8 +11,8 @@
         <Icon icon="delete" @click="deleteEntry" />
       </template>
     </Post>
-    <div v-else-if="!!error">An error occured: {{ error }}</div>
-    <div v-else>Could not find this entry.</div>
+    <div v-else-if="!!error" class="banner">An error occured: {{ error }}</div>
+    <div v-else class="banner">Journal entry not found.</div>
   </main>
 </template>
 

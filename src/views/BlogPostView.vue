@@ -16,7 +16,7 @@
           :edits="edits"
         />
       </div>
-      <div v-else class="nothing-to-see">Check back later!</div>
+      <div v-else class="banner">Check back later!</div>
     </main>
     <nav v-if="current" class="post-navigator">
       <prev-next-navigate v-if="previous" class="prev" :post="previous" />
@@ -155,12 +155,5 @@ Are you sure?`)
     float: right;
     text-align: right;
   }
-}
-
-.nothing-to-see {
-  margin: 2em 0;
-  text-align: center;
-  font-size: 1.5em;
-  line-height: 1em;
 }
 </style>
