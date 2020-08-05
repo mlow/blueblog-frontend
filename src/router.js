@@ -19,7 +19,8 @@ const router = new Router({
         {
           path: "",
           name: "login",
-          component: () => import("./views/LoginView.vue"),
+          component: () =>
+            import(/* webpackChunkName: "login" */ "./views/LoginView.vue"),
         },
       ],
     },
@@ -30,7 +31,8 @@ const router = new Router({
         {
           path: "",
           name: "profile",
-          component: () => import("./views/ProfileView.vue"),
+          component: () =>
+            import(/* webpackChunkName: "profile" */ "./views/ProfileView.vue"),
         },
       ],
     },
@@ -50,13 +52,15 @@ const router = new Router({
           path: "new",
           name: "blog:new",
           meta: { auth: true },
-          component: () => import("./views/BlogPostNew.vue"),
+          component: () =>
+            import(/* webpackChunkName: "blog" */ "./views/BlogPostNew.vue"),
         },
         {
           path: ":id/edit",
           name: "blog:edit",
           meta: { auth: true },
-          component: () => import("./views/BlogPostEdit.vue"),
+          component: () =>
+            import(/* webpackChunkName: "blog" */ "./views/BlogPostEdit.vue"),
         },
       ],
     },
@@ -80,27 +84,37 @@ const router = new Router({
           path: "new",
           name: "journal:new",
           meta: { auth: true },
-          component: () => import("./views/JournalEntryNew.vue"),
+          component: () =>
+            import(
+              /* webpackChunkName: "journal" */ "./views/JournalEntryNew.vue"
+            ),
         },
         {
           path: ":id/edit",
           name: "journal:edit",
           meta: { auth: true },
           props: true,
-          component: () => import("./views/JournalEntryEdit.vue"),
+          component: () =>
+            import(
+              /* webpackChunkName: "journal" */ "./views/JournalEntryEdit.vue"
+            ),
         },
         {
           path: ":id",
           name: "journal:entry",
           meta: { auth: true },
           props: true,
-          component: () => import("./views/JournalEntryView.vue"),
+          component: () =>
+            import(
+              /* webpackChunkName: "journal" */ "./views/JournalEntryView.vue"
+            ),
         },
         {
           path: "",
           name: "journal:view",
           meta: { auth: true },
-          component: () => import("./views/JournalView.vue"),
+          component: () =>
+            import(/* webpackChunkName: "journal" */ "./views/JournalView.vue"),
         },
       ],
     },
