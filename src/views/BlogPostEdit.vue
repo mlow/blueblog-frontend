@@ -44,6 +44,9 @@ import {
 
 export default {
   name: "BlogPostEdit",
+  props: {
+    id: String,
+  },
   data() {
     return {
       post: {},
@@ -55,11 +58,6 @@ export default {
       error: undefined,
       showDraftSaved: false,
     };
-  },
-  computed: {
-    post_id() {
-      return this.$route.params.id;
-    },
   },
   methods: {
     save() {
@@ -84,7 +82,7 @@ export default {
         .mutate({
           mutation: EditPost,
           variables: {
-            id: this.post_id,
+            id: this.id,
             input: this.draft,
           },
           update: (store, { data: { post } }) => {
@@ -145,7 +143,7 @@ export default {
       manual: true,
       query: GetPostForEdit,
       variables() {
-        return { id: this.post_id };
+        return { id: this.id };
       },
       result({
         data: {

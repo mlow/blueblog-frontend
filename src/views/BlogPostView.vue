@@ -34,6 +34,10 @@ import { DeletePost, GetPostEdits } from "../graphql/blog_post.gql";
 
 export default {
   name: "BlogPostView",
+  props: {
+    id: String,
+    slug: String,
+  },
   computed: {
     ...mapGetters(["loggedIn", "userData"]),
     ...mapGetters("blog_post", ["current", "previous", "next"]),
@@ -73,7 +77,7 @@ Are you sure?`)
         })
         .then(() => this.delete())
         .then(() => {
-          if (this.current && this.$route.params.id) {
+          if (this.current && this.id) {
             this.$router.push({
               name: "main",
               params: { id: this.current.id, slug: this.current.slug },
@@ -85,14 +89,14 @@ Are you sure?`)
     },
   },
   watch: {
-    "$route.params.id"(post_id) {
-      if (!!this.next && this.next.id == post_id) {
+    id(id) {
+      if (!!this.next && this.next.id == id) {
         this.incIndex();
-      } else if (!!this.previous && this.previous.id == post_id) {
+      } else if (!!this.previous && this.previous.id == id) {
         this.decIndex();
-      } else if (post_id) {
+      } else if (id) {
         // post not already cached, fetch it
-        this.fetchByID({ id: post_id });
+        this.fetchByID({ id });
       } else {
         this.fetchLatest();
       }
@@ -100,15 +104,15 @@ Are you sure?`)
     current(post) {
       if (post) {
         document.title = post.title;
-        if (this.$route.params.id && this.$route.params.slug !== post.slug) {
+        if (this.id && this.slug !== post.slug) {
           window.history.replaceState(null, "", `/${post.id}/${post.slug}`);
         }
       }
     },
   },
   created() {
-    if (this.$route.params.id) {
-      this.fetchByID({ id: this.$route.params.id });
+    if (this.id) {
+      this.fetchByID({ id: this.id });
     } else {
       this.fetchLatest();
     }

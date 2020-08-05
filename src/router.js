@@ -59,6 +59,7 @@ const router = new Router({
           path: ":id/edit",
           name: "blog:edit",
           meta: { auth: true },
+          props: true,
           component: () =>
             import(/* webpackChunkName: "blog" */ "./views/BlogPostEdit.vue"),
         },
@@ -125,6 +126,7 @@ const router = new Router({
         {
           path: "/:id?/:slug?",
           name: "main",
+          props: true,
           component: BlogPostView,
         },
       ],
