@@ -134,7 +134,10 @@ Are you sure?`)
   components: {
     Icon,
     Post,
-    ContentEditList: () => import("../components/ContentEditList.vue"),
+    ContentEditList: () =>
+      import(
+        /* webpackChunkName: "edit-list" */ "../components/ContentEditList.vue"
+      ),
     PrevNextNavigate,
   },
 };

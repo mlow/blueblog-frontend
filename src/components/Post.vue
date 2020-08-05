@@ -20,6 +20,7 @@
 
 <script>
 import { formatDate } from "@/util";
+import Markdown from "./Markdown.vue";
 
 export default {
   props: {
@@ -46,7 +47,7 @@ export default {
     },
   },
   components: {
-    Markdown: () => import("./Markdown.vue"),
+    Markdown,
   },
 };
 </script>
