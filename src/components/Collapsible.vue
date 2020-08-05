@@ -3,6 +3,7 @@
     <span
       class="collapsible-label"
       :class="'collapsible-' + (expanded ? 'expanded' : 'collapsed')"
+      :style="labelStyle"
       @click="expanded = !expanded"
     >
       {{ label }}
@@ -17,10 +18,17 @@
 export default {
   props: {
     label: String,
+    labelStyle: {
+      type: Object,
+    },
+    initiallyExpanded: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      expanded: false,
+      expanded: this.initiallyExpanded,
     };
   },
 };
