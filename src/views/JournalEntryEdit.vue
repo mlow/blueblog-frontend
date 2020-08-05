@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { decrypt, encrypt } from "@/encryption";
+import JouralEntryMixin from "../mixins/JournalEntryMixin";
 
 import { updateJournalEntry, getJournalEntry } from "../graphql/journal.gql";
 import ContentForm from "../components/ContentForm.vue";
@@ -43,44 +43,18 @@ import FlashIn from "../components/FlashIn.vue";
 
 export default {
   name: "JournalEntryEdit",
-  props: {
-    id: String,
-  },
+  mixins: [JouralEntryMixin],
   data() {
     return {
-      draft: {
-        title: "",
-        content: "",
-        date: null,
-      },
-      error: undefined,
       showDraftSaved: false,
     };
   },
   watch: {
-    entry(value) {
-      if (value) {
-        decrypt(value, this.$store.getters.masterKey)
-          .then((decrypted) => {
-            this.draft = Object.assign({}, this.draft, JSON.parse(decrypted));
-          })
-          .catch((error) => {
-            this.decrypted = undefined;
-            this.error = error.message;
-          });
-      }
+    decrypted(value) {
+      this.draft = Object.assign({}, this.draft, value);
     },
   },
   methods: {
-    encrypted() {
-      return encrypt(
-        JSON.stringify({
-          title: this.draft.title,
-          content: this.draft.content,
-        }),
-        this.$store.getters.masterKey
-      );
-    },
     async submit() {
       if (!this.draft.title.trim()) {
         this.error = "The title cannot be empty.";
@@ -127,15 +101,6 @@ export default {
     },
     cancel() {
       this.$router.goBackOrMain();
-    },
-  },
-  apollo: {
-    entry: {
-      query: getJournalEntry,
-      variables() {
-        return { id: this.id };
-      },
-      update: ({ journal_entry: entry }) => entry,
     },
   },
   components: {

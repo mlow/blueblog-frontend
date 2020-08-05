@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { encrypt } from "@/encryption";
+import JournalEntryMixin from "../mixins/JournalEntryMixin";
 
 import { createJournalEntry, getJournalEntry } from "../graphql/journal.gql";
 import ContentForm from "../components/ContentForm.vue";
@@ -44,27 +44,13 @@ import FlashIn from "../components/FlashIn.vue";
 
 export default {
   name: "JournalEntryNew",
+  mixins: [JournalEntryMixin],
   data() {
     return {
-      draft: {
-        title: "",
-        content: "",
-        date: null,
-      },
-      error: undefined,
       showDraftSaved: false,
     };
   },
   methods: {
-    encrypted() {
-      return encrypt(
-        JSON.stringify({
-          title: this.draft.title,
-          content: this.draft.content,
-        }),
-        this.$store.getters.masterKey
-      );
-    },
     async submit() {
       if (!this.draft.title.trim()) {
         this.error = "The title cannot be empty.";

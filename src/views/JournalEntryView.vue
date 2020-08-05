@@ -17,38 +17,15 @@
 </template>
 
 <script>
-import {
-  getJournalEntries,
-  getJournalEntry,
-  deleteJournalEntry,
-} from "../graphql/journal.gql";
-import { decrypt } from "../encryption";
+import JournalEntryMixin from "../mixins/JournalEntryMixin";
+
+import { getJournalEntries, deleteJournalEntry } from "../graphql/journal.gql";
 import Post from "../components/Post.vue";
 import Icon from "../components/Icon.vue";
 
 export default {
   name: "JournalEntryView",
-  props: {
-    id: String,
-  },
-  data() {
-    return {
-      decrypted: undefined,
-      error: undefined,
-    };
-  },
-  watch: {
-    entry(value) {
-      if (value) {
-        decrypt(value, this.$store.getters.masterKey)
-          .then((decrypted) => (this.decrypted = JSON.parse(decrypted)))
-          .catch((error) => {
-            this.decrypted = undefined;
-            this.error = error.message;
-          });
-      }
-    },
-  },
+  mixins: [JournalEntryMixin],
   methods: {
     deleteEntry() {
       if (
@@ -80,15 +57,6 @@ Are you sure?`)
           alert("Entry deleted!");
         })
         .catch((error) => alert(error));
-    },
-  },
-  apollo: {
-    entry: {
-      query: getJournalEntry,
-      variables() {
-        return { id: this.id };
-      },
-      update: ({ journal_entry: entry }) => entry,
     },
   },
   components: {
