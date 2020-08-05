@@ -1,0 +1,55 @@
+fragment entryDetails on JournalEntry {
+  id
+  encryption_params {
+    cipher
+    ... on Aes256GcmParams {
+      iv
+    }
+  }
+  ciphertext
+  date
+  draft
+}
+
+query getJournalEntries($first: Int, $after: String) {
+  journal_entries(pager: { first: $first, after: $after }, draft: false) {
+    edges: afterEdges {
+      node {
+        id
+        date
+      }
+    }
+  }
+}
+
+query getJournalEntry($id: ID!) {
+  journal_entry: node(id: $id) {
+    ...entryDetails
+  }
+}
+
+mutation createJournalEntry($input: CreateJournalEntryInput!) {
+  journal_entry: create_journal_entry(input: $input) {
+    ...entryDetails
+  }
+}
+
+mutation updateJournalEntry($id: ID!, $input: UpdateJournalEntryInput!) {
+  journal_entry: update_journal_entry(id: $id, input: $input) {
+    ...entryDetails
+  }
+}
+
+mutation deleteJournalEntry($id: ID!) {
+  id: delete_journal_entry(id: $id)
+}
+
+query getDrafts {
+  drafts: journal_entries(draft: true) {
+    edges: afterEdges {
+      draft: node {
+        ...entryDetails
+      }
+    }
+  }
+}

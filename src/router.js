@@ -61,6 +61,50 @@ const router = new Router({
       ],
     },
     {
+      path: "/journal",
+      component: MainLayout,
+      beforeEnter: (to, from, next) => {
+        if (
+          store.getters.userData.author.wrapped_key &&
+          !store.getters.masterKey
+        ) {
+          // masterKey not decrypted, so redirect to login page so password
+          // is retrieved and it can be decrypted
+          next({ name: "login", query: { redirect: to.path, forced: true } });
+        } else {
+          next();
+        }
+      },
+      children: [
+        {
+          path: "new",
+          name: "journal:new",
+          meta: { auth: true },
+          component: () => import("./views/JournalEntryNew.vue"),
+        },
+        {
+          path: ":id/edit",
+          name: "journal:edit",
+          meta: { auth: true },
+          props: true,
+          component: () => import("./views/JournalEntryEdit.vue"),
+        },
+        {
+          path: ":id",
+          name: "journal:entry",
+          meta: { auth: true },
+          props: true,
+          component: () => import("./views/JournalEntryView.vue"),
+        },
+        {
+          path: "",
+          name: "journal:view",
+          meta: { auth: true },
+          component: () => import("./views/JournalView.vue"),
+        },
+      ],
+    },
+    {
       path: "/",
       component: MainLayout,
       children: [

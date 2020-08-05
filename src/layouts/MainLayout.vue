@@ -5,9 +5,9 @@
         <Icon
           icon="feather"
           v-show="!isAuthoringRoute"
-          :route="{ name: 'blog:new' }"
+          :route="{ name: isJournalRoute ? 'journal:new' : 'blog:new' }"
         />
-        <Icon icon="book" />
+        <Icon icon="book" :route="{ name: 'journal:view' }" />
         <Icon icon="user-profile" route="/profile" />
         <Icon icon="sign-out" route="/logout" />
       </template>
@@ -38,6 +38,9 @@ export default {
           redirect: this.$route.fullPath,
         },
       };
+    },
+    isJournalRoute() {
+      return this.$route.matched[0].path === "/journal";
     },
     isAuthoringRoute() {
       return this.$route.name.endsWith("new");
