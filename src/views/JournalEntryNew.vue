@@ -1,5 +1,6 @@
 <template>
   <main>
+    <h2>New journal entry</h2>
     <ContentForm
       submitLabel="Save"
       :title.sync="draft.title"

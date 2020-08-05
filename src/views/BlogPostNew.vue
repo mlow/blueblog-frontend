@@ -1,5 +1,6 @@
 <template>
   <main>
+    <h2>New blog post</h2>
     <ContentForm
       submitLabel="Publish"
       :title.sync="draft.title"
