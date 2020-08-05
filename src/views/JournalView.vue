@@ -1,20 +1,41 @@
 <template>
-  <main>
+  <main style="margin-bottom: 2rem;">
     <div v-if="encryptionConfigured">
-      <div v-for="(entriesByMonth, year) in edgesByYearAndMonth" :key="year">
-        <h1>{{ year }}</h1>
-        <div v-for="(entries, month) in entriesByMonth" :key="month">
-          <h2>{{ formatDate(parse(month, "M"), "MMMM") }}</h2>
-          <ol>
-            <li v-for="entry in entries" :key="entry.id">
-              <router-link
-                :to="{ name: 'journal:entry', params: { id: entry.id } }"
-              >
-                {{ formatDate(entry.date, "MMMM D") }}
-              </router-link>
-            </li>
-          </ol>
-        </div>
+      <div v-if="Object.keys(edgesByYearAndMonth).length > 0">
+        <h1 style="margin: 0.25rem 0;">Journal</h1>
+        <Collapsible
+          v-for="(byMonth, year, iy) in edgesByYearAndMonth"
+          :key="year"
+          :initiallyExpanded="iy == 0"
+          :label="year"
+          :labelStyle="{
+            'font-size': '1.5rem',
+          }"
+        >
+          <Collapsible
+            v-for="(entries, month, im) in byMonth"
+            :key="`${year}-${month}`"
+            :label="getMonth(entries[0].date)"
+            :initiallyExpanded="iy == 0 && im == 0"
+            :labelStyle="{
+              'font-size': '1.25rem',
+            }"
+          >
+            <router-link
+              v-for="entry in entries"
+              :key="entry.id"
+              :to="{ name: 'journal:entry', params: { id: entry.id } }"
+            >
+              {{ getDate(entry.date) }}
+              <br />
+            </router-link>
+          </Collapsible>
+        </Collapsible>
+      </div>
+      <div v-else class="banner">
+        No journal entries, yet!
+        <router-link :to="{ name: 'journal:new' }">Click here</router-link>
+        to start your journal.
       </div>
     </div>
     <div v-else class="banner">
@@ -27,8 +48,15 @@
 
 <script>
 import { getJournalEntries } from "../graphql/journal.gql";
-import { formatDate } from "@/util";
-import { parse } from "date-and-time";
+import Collapsible from "../components/Collapsible.vue";
+
+const longDateFormatter = Intl.DateTimeFormat(undefined, {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+const monthFormatter = Intl.DateTimeFormat(undefined, { month: "long" });
 
 export default {
   data() {
@@ -42,14 +70,8 @@ export default {
       this.entries.forEach((entry) => {
         const year = entry.date.getFullYear();
         const month = entry.date.getMonth() + 1;
-        let years = result[year] || (result[year] = {});
-        if (years === undefined) {
-          years = result[year] = {};
-        }
-        let entriesByMonth = years[month];
-        if (entriesByMonth === undefined) {
-          entriesByMonth = years[month] = [];
-        }
+        const years = result[year] || (result[year] = {});
+        const entriesByMonth = years[month] || (years[month] = []);
         entriesByMonth.push(entry);
       });
       return result;
@@ -59,8 +81,8 @@ export default {
     },
   },
   methods: {
-    formatDate,
-    parse,
+    getMonth: (date) => monthFormatter.format(date),
+    getDate: (date) => longDateFormatter.format(date),
   },
   apollo: {
     entries: {
@@ -75,6 +97,9 @@ export default {
         }));
       },
     },
+  },
+  components: {
+    Collapsible,
   },
 };
 </script>
