@@ -39,7 +39,6 @@ import PostPreview from "../components/PostPreview.vue";
 import DateTimeInput from "../components/DateTimeInput.vue";
 
 import { CreatePost, GetPostForEdit } from "../graphql/blog_post.gql";
-import { mapActions } from "vuex";
 
 export default {
   data() {
@@ -103,14 +102,6 @@ export default {
     cancel() {
       this.$router.goBackOrMain();
     },
-    ...mapActions("ui", ["setAuthoring"]),
-  },
-  mounted() {
-    this.setAuthoring(true);
-  },
-  beforeRouteLeave(to, from, next) {
-    this.setAuthoring(false);
-    next();
   },
   components: {
     ContentForm,

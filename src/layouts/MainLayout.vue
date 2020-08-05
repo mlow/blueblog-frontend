@@ -4,7 +4,7 @@
       <template v-if="loggedIn">
         <Icon
           icon="feather"
-          v-show="!authoring"
+          v-show="!isAuthoringRoute"
           :route="{ name: 'blog:new' }"
         />
         <Icon icon="book" />
@@ -39,8 +39,10 @@ export default {
         },
       };
     },
+    isAuthoringRoute() {
+      return this.$route.name.endsWith("new");
+    },
     ...mapGetters(["loggedIn"]),
-    ...mapGetters("ui", ["authoring"]),
   },
   components: {
     Icon,
