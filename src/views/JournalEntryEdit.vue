@@ -13,7 +13,7 @@
     >
       <template v-slot:before>
         <div class="form-group">
-          <DateTimeInput style="width:180px" v-model="draft.date" />
+          <DateInput style="width:160px" v-model="draft.date" />
         </div>
       </template>
       <template v-slot:controls>
@@ -38,7 +38,7 @@ import JouralEntryMixin from "../mixins/JournalEntryMixin";
 import { updateJournalEntry, getJournalEntry } from "../graphql/journal.gql";
 import ContentForm from "../components/ContentForm.vue";
 import PostPreview from "../components/PostPreview.vue";
-import DateTimeInput from "../components/DateTimeInput.vue";
+import DateInput from "../components/DateInput.vue";
 import JournalDrafts from "../components/JournalDrafts.vue";
 import FlashIn from "../components/FlashIn.vue";
 
@@ -107,7 +107,7 @@ export default {
   components: {
     ContentForm,
     PostPreview,
-    DateTimeInput,
+    DateInput,
     JournalDrafts,
     FlashIn,
   },
