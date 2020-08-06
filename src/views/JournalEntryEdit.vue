@@ -62,12 +62,7 @@ export default {
   },
   methods: {
     async submit() {
-      if (!this.draft.title.trim()) {
-        this.error = "The title cannot be empty.";
-        return;
-      }
-      if (!this.draft.content.trim()) {
-        this.error = "The post cannot be empty.";
+      if (!this.validate()) {
         return;
       }
 

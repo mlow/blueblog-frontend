@@ -10,7 +10,7 @@ export default {
       draft: {
         title: "",
         content: "",
-        date: null,
+        date: new Date(),
       },
       decrypted: undefined,
       error: undefined,
@@ -31,6 +31,17 @@ export default {
     },
   },
   methods: {
+    validate() {
+      if (!this.draft.date) {
+        this.error = "Did you forget to set the date?";
+        return false;
+      }
+      if (!this.draft.content.trim()) {
+        this.error = "Forgetting to write something?";
+        return false;
+      }
+      return true;
+    },
     encrypted() {
       return encrypt(
         JSON.stringify({
