@@ -13,7 +13,11 @@ export default {
         if (!this.value) {
           return "";
         }
-        return this.value.toISOString().split("T")[0];
+        const dateString = this.value.toISOString().split("T")[0];
+        if (this.value.getTime() % 86400 !== 0) {
+          this.$emit("input", new Date(dateString));
+        }
+        return dateString;
       },
       set(value) {
         this.$emit("input", value ? new Date(value) : null);
