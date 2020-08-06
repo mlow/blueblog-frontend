@@ -51,6 +51,11 @@ export default {
     };
   },
   watch: {
+    entry(value) {
+      if (value) {
+        this.draft.date = new Date(value.date);
+      }
+    },
     decrypted(value) {
       this.draft = Object.assign({}, this.draft, value);
     },
