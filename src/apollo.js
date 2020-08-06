@@ -13,7 +13,7 @@ Vue.use(VueApollo);
 const cache = new InMemoryCache();
 
 const httpLink = createHttpLink({
-  uri: "/graphql",
+  uri: "/api",
   credentials: "include",
   fetch: (uri, options) => {
     const token = store.getters.jwt;
