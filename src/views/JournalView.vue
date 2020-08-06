@@ -1,12 +1,12 @@
 <template>
   <main style="margin-bottom: 2rem;">
     <div v-if="encryptionConfigured">
-      <div v-if="Object.keys(edgesByYearAndMonth).length > 0">
+      <div v-if="Object.keys(entriesByYearAndMonth).length > 0">
         <h1 style="margin: 0.25rem 0;">Journal</h1>
         <Collapsible
-          v-for="(byMonth, year, iy) in edgesByYearAndMonth"
+          v-for="(byMonth, year, iy) in entriesByYearAndMonth"
           :key="year"
-          :initiallyExpanded="iy == 0"
+          :initiallyExpanded="iy === 0"
           :label="year"
           :labelStyle="{
             'font-size': '1.5rem',
@@ -16,7 +16,7 @@
             v-for="(entries, month, im) in byMonth"
             :key="`${year}-${month}`"
             :label="getMonth(entries[0].date)"
-            :initiallyExpanded="iy == 0 && im == 0"
+            :initiallyExpanded="iy === 0 && im === 0"
             :labelStyle="{
               'font-size': '1.25rem',
             }"
@@ -65,7 +65,7 @@ export default {
     };
   },
   computed: {
-    edgesByYearAndMonth() {
+    entriesByYearAndMonth() {
       const result = {};
       this.entries.forEach((entry) => {
         const year = entry.date.getFullYear();
