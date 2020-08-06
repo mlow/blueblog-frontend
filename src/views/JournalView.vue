@@ -1,10 +1,10 @@
 <template>
   <main style="margin-bottom: 2rem;">
     <div v-if="encryptionConfigured">
-      <div v-if="Object.keys(entriesByYearAndMonth).length > 0">
+      <div v-if="sortedYears.length > 0">
         <h1 style="margin: 0.25rem 0;">Journal</h1>
         <Collapsible
-          v-for="(byMonth, year, iy) in entriesByYearAndMonth"
+          v-for="(year, iy) in sortedYears"
           :key="year"
           :initiallyExpanded="iy === 0"
           :label="year"
@@ -13,16 +13,16 @@
           }"
         >
           <Collapsible
-            v-for="(entries, month, im) in byMonth"
+            v-for="(month, im) in sortedKeys(entriesByYearAndMonth[year])"
             :key="`${year}-${month}`"
-            :label="getMonth(entries[0].date)"
+            :label="getMonth(entriesByYearAndMonth[year][month][0].date)"
             :initiallyExpanded="iy === 0 && im === 0"
             :labelStyle="{
               'font-size': '1.25rem',
             }"
           >
             <router-link
-              v-for="entry in entries"
+              v-for="entry in entriesByYearAndMonth[year][month]"
               :key="entry.id"
               :to="{ name: 'journal:entry', params: { id: entry.id } }"
             >
@@ -76,11 +76,15 @@ export default {
       });
       return result;
     },
+    sortedYears() {
+      return this.sortedKeys(this.entriesByYearAndMonth);
+    },
     encryptionConfigured() {
       return !!this.$store.getters.userData.author.wrapped_key;
     },
   },
   methods: {
+    sortedKeys: (obj) => Object.keys(obj).sort((a, b) => b - a),
     getMonth: (date) => monthFormatter.format(date),
     getDate: (date) => longDateFormatter.format(date),
   },
