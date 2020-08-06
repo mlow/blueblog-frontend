@@ -36,7 +36,11 @@
 <script>
 import JournalEntryMixin from "../mixins/JournalEntryMixin";
 
-import { createJournalEntry, getJournalEntry } from "../graphql/journal.gql";
+import {
+  createJournalEntry,
+  getJournalEntry,
+  getJournalEntries,
+} from "../graphql/journal.gql";
 import ContentForm from "../components/ContentForm.vue";
 import PostPreview from "../components/PostPreview.vue";
 import DateInput from "../components/DateInput.vue";
@@ -72,6 +76,19 @@ export default {
               variables: { id: data.journal_entry.id },
               data,
             });
+            // append new entry to existing entries
+            const existing = store.readQuery({
+              query: getJournalEntries,
+            });
+            existing.journal_entries.edges.push({
+              __typename: "JournalEntryEdge",
+              node: data.journal_entry,
+            });
+            existing.journal_entries.edges.sort((a, b) =>
+                new Date(b.node.date).getTime() -
+                new Date(a.node.date).getTime()
+            );
+            store.writeQuery({ query: getJournalEntries, data: existing });
           },
         })
         .then(
