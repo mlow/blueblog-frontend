@@ -6,12 +6,12 @@
   >
     <header>
       <div>
-        <h2 class="title">{{ title }}</h2>
+        <h2 class="title">{{ title || dateFormatted }}</h2>
         <span v-show="hovered" class="content-controls">
           <slot name="controls"></slot>
         </span>
       </div>
-      <div class="date">{{ dateFormatted }}</div>
+      <div v-if="title" class="date">{{ dateFormatted }}</div>
     </header>
     <Markdown v-if="render" :source="content" />
     <div v-else class="content rendered-markdown" v-html="content" />
