@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { formatDate } from "@/util";
+import { locale } from "../util";
 import {
   getDrafts,
   createDraft,
@@ -81,7 +81,7 @@ export default {
         return edges
           .map(({ draft }) => {
             const date = new Date(draft.date);
-            const formatted = formatDate(date, "YYYY-MM-DD HH:mm");
+            const formatted = locale.shortDateAndTime(date);
             const title = draft.title ? " | " + draft.title : "";
             return {
               ...draft,

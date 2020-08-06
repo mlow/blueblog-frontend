@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { formatDate } from "@/util";
+import { locale } from "../util";
 import { encrypt, decrypt } from "@/encryption";
 import {
   getDrafts,
@@ -51,7 +51,7 @@ export default {
         .then((decrypted) => JSON.parse(decrypted))
         .then(({ title, content }) => {
           const date = new Date(draft.date);
-          const formatted = formatDate(date, "YYYY-MM-DD HH:mm");
+          const formatted = locale.shortDateAndTime(date);
           return {
             id: draft.id,
             date,

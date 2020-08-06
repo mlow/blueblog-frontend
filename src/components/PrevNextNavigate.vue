@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { formatDate } from "@/util";
+import { locale } from "../util";
 
 export default {
   props: {
@@ -22,7 +22,7 @@ export default {
       };
     },
     publish_date_formatted() {
-      return formatDate(this.post.publish_date, "MMMM D, YYYY");
+      return locale.longDate(this.post.publish_date);
     },
   },
 };

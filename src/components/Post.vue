@@ -11,7 +11,7 @@
           <slot name="controls"></slot>
         </span>
       </div>
-      <div class="date">{{ date_formatted }}</div>
+      <div class="date">{{ dateFormatted }}</div>
     </header>
     <Markdown v-if="render" :source="content" />
     <div v-else class="content rendered-markdown" v-html="content" />
@@ -19,16 +19,12 @@
 </template>
 
 <script>
-import { formatDate } from "@/util";
+import { locale } from "../util";
 import Markdown from "./Markdown.vue";
 
 export default {
   props: {
     date: [Date, String],
-    dateFormat: {
-      type: String,
-      default: "MMMM D, YYYY",
-    },
     title: String,
     content: String,
     render: {
@@ -42,8 +38,8 @@ export default {
     };
   },
   computed: {
-    date_formatted() {
-      return formatDate(this.date, this.dateFormat);
+    dateFormatted() {
+      return locale.longDate(this.date);
     },
   },
   components: {

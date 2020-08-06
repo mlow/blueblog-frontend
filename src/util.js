@@ -1,12 +1,35 @@
-import dateAndTime from "date-and-time";
 import { encode, decode } from "base64-arraybuffer";
 
-export function formatDate(date, format) {
-  return dateAndTime.format(
-    date instanceof Date ? date : new Date(date),
-    format
-  );
-}
+const month = Intl.DateTimeFormat(undefined, { month: "long" });
+const longDate = Intl.DateTimeFormat(undefined, {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const longDateWithWeek = Intl.DateTimeFormat(undefined, {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+});
+const shortDateAndTime = Intl.DateTimeFormat(undefined, {
+  day: "numeric",
+  month: "numeric",
+  year: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric",
+  hour12: false,
+});
+
+export const locale = {
+  month: (date) => month.format(_toDate(date)),
+  longDate: (date) => longDate.format(_toDate(date)),
+  longDateWithWeek: (date) => longDateWithWeek.format(_toDate(date)),
+  shortDateAndTime: (date) => shortDateAndTime.format(_toDate(date)),
+};
+
+const _toDate = (date) => (date instanceof Date ? date : new Date(date));
 
 /**
  * @param {string} base64 the base64 encoded string of data to decode.

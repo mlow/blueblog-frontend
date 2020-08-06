@@ -2,7 +2,7 @@
   <Collapsible label="Edits">
     <ul class="edit-list">
       <li v-for="edit in edits" :key="edit.id">
-        <Collapsible :label="formatDate(edit.date)">
+        <Collapsible :label="locale.dateAndTime(edit.date)">
           <ContentEditChanges :edit_id="edit.id" />
         </Collapsible>
       </li>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { formatDate } from "@/util";
+import { locale } from "../util";
 import Collapsible from "./Collapsible.vue";
 import ContentEditChanges from "./ContentEditChanges.vue";
 
@@ -20,7 +20,7 @@ export default {
     edits: Array,
   },
   methods: {
-    formatDate: (date) => formatDate(date, "YYYY-MM-DD HH:mm"),
+    locale,
   },
   components: {
     Collapsible,
