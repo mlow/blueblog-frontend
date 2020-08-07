@@ -2,10 +2,11 @@
   <component
     :is="component"
     :style="{
-      opacity: display ? 1 : 0,
-      transition: 'opacity 1000ms ease',
+      opacity,
+      transition: 'opacity 1000ms ease-out',
     }"
-    @transitionend="$emit('update:display', false)"
+    v-show="show"
+    @transitionend="transitionend"
   >
     <slot></slot>
   </component>
@@ -18,6 +19,31 @@ export default {
     component: {
       type: [Object, String],
       default: "span",
+    },
+  },
+  data() {
+    return {
+      show: this.display,
+      opacity: 0,
+    };
+  },
+  watch: {
+    display(val) {
+      if (val) {
+        this.show = true;
+        setTimeout(() => (this.opacity = 1), 20);
+      } else {
+        this.opacity = 0;
+      }
+    },
+  },
+  methods: {
+    transitionend() {
+      if (this.display) {
+        this.$emit("update:display", false);
+      } else {
+        this.show = false;
+      }
     },
   },
 };
