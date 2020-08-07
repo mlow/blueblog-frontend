@@ -17,9 +17,7 @@
         </div>
       </template>
       <template v-slot:controls>
-        <FlashIn style="margin-left: 0.5rem" :display.sync="showDraftSaved">
-          Draft saved
-        </FlashIn>
+        <FlashIn :display.sync="showDraftSaved">Draft saved</FlashIn>
       </template>
     </ContentForm>
     <JournalDrafts
@@ -84,7 +82,8 @@ export default {
               __typename: "JournalEntryEdge",
               node: data.journal_entry,
             });
-            existing.journal_entries.edges.sort((a, b) =>
+            existing.journal_entries.edges.sort(
+              (a, b) =>
                 new Date(b.node.date).getTime() -
                 new Date(a.node.date).getTime()
             );

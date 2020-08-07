@@ -17,9 +17,7 @@
         </div>
       </template>
       <template v-slot:controls>
-        <FlashIn style="margin-left: 0.5rem" :display.sync="showDraftSaved">
-          Draft saved
-        </FlashIn>
+        <FlashIn :display.sync="showDraftSaved">Draft saved</FlashIn>
       </template>
     </ContentForm>
     <JournalDrafts
