@@ -34,6 +34,10 @@ export default {
   },
   methods: {
     _updateOrSave() {
+      if (!this.content) {
+        // don't save an empty draft
+        return;
+      }
       (this.selected.id ? this.update : this.save)().then(() => {
         this.$emit("draft:saved");
       });
