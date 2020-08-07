@@ -20,7 +20,6 @@
 
 <script>
 import { locale } from "../util";
-import Markdown from "./Markdown.vue";
 
 export default {
   props: {
@@ -43,7 +42,7 @@ export default {
     },
   },
   components: {
-    Markdown,
+    Markdown: () => import(/* webpackChunkName: "markdown" */ "./Markdown.vue"),
   },
 };
 </script>
