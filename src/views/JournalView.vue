@@ -1,5 +1,5 @@
 <template>
-  <main style="margin-bottom: 2rem;">
+  <main>
     <div v-if="encryptionConfigured">
       <div v-if="sortedYears.length > 0">
         <h1 style="margin: 0.25rem 0;">Journal</h1>

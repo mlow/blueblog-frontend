@@ -13,7 +13,7 @@
       </div>
       <div v-if="title" class="date">{{ dateFormatted }}</div>
     </header>
-    <Markdown v-if="render" :source="content" />
+    <Markdown class="content" v-if="render" :source="content" />
     <div v-else class="content rendered-markdown" v-html="content" />
   </article>
 </template>
@@ -49,7 +49,7 @@ export default {
 
 <style lang="scss" scoped>
 .post {
-  margin-top: 2rem;
+  margin: 1.5rem 0;
 
   header {
     .title {
@@ -71,6 +71,7 @@ export default {
   }
 
   > .content {
+    overflow-wrap: break-word;
     padding: 0 0.6875rem;
   }
 }

@@ -145,7 +145,9 @@ Are you sure?`)
 
 <style lang="scss" scoped>
 .post-navigator {
-  margin: 1rem;
+  @media (min-width: 768px) {
+    margin: -0.75rem;
+  }
   overflow: auto;
 
   &:after {

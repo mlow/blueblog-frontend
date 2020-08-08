@@ -14,11 +14,11 @@
       <Icon v-else icon="sign-in" :route="loginRoute" />
     </span>
 
-    <div id="content">
-      <header class="logo">
-        <router-link to="/">Blue Blog</router-link>
-      </header>
+    <header class="logo">
+      <router-link to="/">Blue Blog</router-link>
+    </header>
 
+    <div id="content">
       <router-view />
     </div>
   </div>
@@ -53,14 +53,20 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .logo a {
   text-decoration: inherit;
   color: inherit;
   outline: none;
 }
 
-#content >>> main {
-  padding: 0 2rem;
+#content {
+  margin: 1rem;
+  @media (min-width: 768px) {
+    margin: 2rem;
+  }
+  ::v-deep main > h2 {
+    margin: 0;
+  }
 }
 </style>

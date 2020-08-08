@@ -48,6 +48,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/styles/form.scss";
+.form-control {
+  margin-top: 1rem;
+}
 .controls-left {
   > * {
     margin-right: 0.5rem;

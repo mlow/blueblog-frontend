@@ -1,5 +1,5 @@
 <template>
-  <main style="margin-bottom: 2rem;">
+  <main>
     <Post
       v-if="decrypted !== undefined"
       v-bind="decrypted"
