@@ -2,7 +2,7 @@
   <Collapsible label="Edits">
     <ul class="edit-list">
       <li v-for="edit in edits" :key="edit.id">
-        <Collapsible :label="locale.dateAndTime(edit.date)">
+        <Collapsible :label="shortDateAndTime(edit.date)">
           <ContentEditChanges :edit_id="edit.id" />
         </Collapsible>
       </li>
@@ -20,7 +20,7 @@ export default {
     edits: Array,
   },
   methods: {
-    locale,
+    shortDateAndTime: locale.shortDateAndTime,
   },
   components: {
     Collapsible,
