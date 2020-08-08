@@ -11,11 +11,10 @@
       />
     </div>
     <div class="form-group">
-      <textarea
+      <ResizingTextarea
         style="width:100%"
-        ref="content"
         :value="content"
-        @input="$emit('update:content', $event.target.value)"
+        @input="$emit('update:content', $event)"
         placeholder="Write your thoughts..."
       />
     </div>
@@ -32,6 +31,8 @@
 </template>
 
 <script>
+import ResizingTextarea from "./ResizingTextarea";
+
 export default {
   props: {
     title: String,
@@ -39,20 +40,8 @@ export default {
     error: String,
     submitLabel: String,
   },
-  methods: {
-    fitTextareaToContent(target) {
-      target.style.height = "";
-      target.style.height = target.scrollHeight + "px";
-    },
-  },
-  watch: {
-    content: {
-      handler() {
-        setTimeout(() => this.fitTextareaToContent(this.$refs.content));
-      },
-      // immediate so this gets fired upon creation as well
-      immediate: true,
-    },
+  components: {
+    ResizingTextarea,
   },
 };
 </script>
