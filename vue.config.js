@@ -13,7 +13,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       "/api": {
-        target: "http://localhost:4000/graphql",
+        target: "http://api:4000/graphql",
         pathRewrite: { "^/api": "" },
         changeOrigin: true,
       },
